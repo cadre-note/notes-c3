@@ -653,15 +653,15 @@ function flowView(){
   <p class="small">紅色為 CCP、橘色為 OPRP，僅供學習參考；實際分類與管制界限以本廠 HACCP 計畫為準。</p></section>`;
 }
 function knowView(){
-  const seg=`<p class="ksub">三個職務共用 · 隨時查閱</p><div class="kseg">${[["news","時事"],["law","法規"],["tools","工具"]].map(([k,t])=>`<button type="button" data-act="ktab" data-v="${k}" aria-pressed="${st.ktab===k}">${kxTab(k,t)}</button>`).join("")}</div>`;
+  const seg=`<p class="ksub">三個職務共用 · 隨時查閱</p><div class="kseg">${[["news","每週更新"],["law","勞基法"],["tools","管理工具"]].map(([k,t])=>`<button type="button" data-act="ktab" data-v="${k}" aria-pressed="${st.ktab===k}">${kxTab(k,t)}</button>`).join("")}</div>`;
   let body="";
   if(st.ktab==="law"){ const L=DATA.laws;
-    body=`<section class="card"><h2>法規</h2><p class="small">條文原文取自${esc(L.src.name)}（修正日期 ${esc(L.src.amended)}），${esc(L.src.checked)} 查詢。重點只寫條文直接看得出的內容；要套用到現場前，先和人資確認。</p></section>
+    body=`<section class="card"><h2>勞基法</h2><p class="small">條文原文取自${esc(L.src.name)}（修正日期 ${esc(L.src.amended)}），${esc(L.src.checked)} 查詢。重點只寫條文直接看得出的內容；要套用到現場前，先和人資確認。</p></section>
     ${kxBar(L.cards.length)}<div class="kx-list">${L.cards.map(c=>kxCard(c.t,`<ul class="pts">${c.points.map(p=>`<li>${esc(p)}</li>`).join("")}</ul><div class="ask"><b>先和人資確認　</b>${esc(c.ask)}</div><details><summary>看條文原文</summary>${c.arts.map(a=>`<p class="art"><b>${esc(a)}</b>${esc(L.text[a]||"")}</p>`).join("")}</details>`,{tag:c.arts.join("、")})).join("")}</div>
     <div class="kx-bar"><span>基礎班已有的勞基法重點</span></div><div class="kx-list">${DATA.basicLaws.map(x=>kxCard(x.t,`<ul class="pts">${x.i.map(p=>`<li>${esc(p)}</li>`).join("")}</ul>`)).join("")}</div>
     <p class="src small">出處：<a href="${esc(L.src.url)}" target="_blank" rel="noopener">${esc(L.src.name)}</a></p>`; }
   if(st.ktab==="news") body=`<div id="newsbox" style="display:grid;gap:12px"><p class="small">讀取中…</p></div>`;
-  if(st.ktab==="tools") body=`<section class="card"><h2>工具</h2><p class="small">各週教過的方法整理在這裡，需要時直接回來查。</p></section>${kxBar(DATA.tools.length)}<div class="kx-list">${DATA.tools.map(t=>kxCard(t.t,`<ul class="pts">${t.i.map(p=>`<li>${esc(p)}</li>`).join("")}</ul>`,{tag:`第 ${t.w} 週`})).join("")}</div>`;
+  if(st.ktab==="tools") body=`<section class="card"><h2>管理工具</h2><p class="small">各週教過的方法整理在這裡，需要時直接回來查。</p></section>${kxBar(DATA.tools.length)}<div class="kx-list">${DATA.tools.map(t=>kxCard(t.t,`<ul class="pts">${t.i.map(p=>`<li>${esc(p)}</li>`).join("")}</ul>`,{tag:`第 ${t.w} 週`})).join("")}</div>`;
   return seg+`<div class="kx-wrap">${body}</div>`;
 }
 /* 時事：和基礎班同一份資料（食安事件每週二、推薦閱讀一三五），哪一區比較新就放上面 */
