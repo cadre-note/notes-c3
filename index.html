@@ -500,6 +500,32 @@ html.is-lock body{overflow:hidden}
 /* 小螢幕（375×667 等）完成畫面：圖縮小、按鈕固定在卡片底部，不用往下捲 */
 .celebrate:has(.is-cel) .nav2{position:sticky;bottom:-14px;background:var(--surface);padding:8px 0 10px;margin-top:auto;width:100%;justify-content:center}
 @media (max-height:760px){.is-cel svg{max-height:24vh}.celebrate:has(.is-cel) h2{font-size:1.2rem}.celebrate:has(.is-cel) .cheer{font-size:.95rem}}
+/* 四週完工動畫（2026-10-30，基礎班與進階班共用） */
+#isle-mile{position:fixed;inset:0;z-index:150;display:grid;place-items:center;overflow-y:auto;background:radial-gradient(circle at 50% 40%,rgba(255,236,190,.55),rgba(16,24,32,.8));padding:16px;animation:ml-in .35s ease-out both}
+#isle-mile[hidden]{display:none!important}
+@keyframes ml-in{from{opacity:0}to{opacity:1}}
+.ml-box{width:min(440px,100%);background:var(--surface);color:var(--ink);border-radius:22px;padding:16px 14px 14px;display:grid;gap:8px;text-align:center;box-shadow:0 18px 50px rgba(0,0,0,.35)}
+.ml-box svg{width:100%;height:auto;display:block;border-radius:14px}
+.ml-eye{font-size:.78rem;letter-spacing:.1em;color:var(--accent);font-weight:700}
+.ml-lab{display:grid;grid-template-columns:repeat(4,1fr);gap:4px;font-size:.72rem;line-height:1.35;color:var(--muted);animation:ml-up .5s ease-out 2s both}
+.ml-lab b{display:block;font-size:.8rem;letter-spacing:-.5px}
+.ml-lab.wide{grid-template-columns:1fr}
+.ml-t{font:700 1.3rem var(--f-display,inherit);margin:0;animation:ml-up .5s ease-out 2.3s both}
+.ml-s{margin:0;font-size:.88rem;color:var(--muted);animation:ml-up .5s ease-out 2.6s both}
+.ml-next{background:var(--accent-soft);border-radius:12px;padding:8px 10px;font-size:.84rem;line-height:1.6;text-align:left;animation:ml-up .5s ease-out 2.9s both}
+.ml-go{border:0;background:var(--accent);color:var(--on-accent,#fff);font:700 1rem var(--f-body,inherit);border-radius:14px;padding:12px;min-height:44px;cursor:pointer;animation:ml-up .4s ease-out 3.1s both}
+.ml-go:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+@keyframes ml-up{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.ml-pop{transform-box:fill-box;transform-origin:50% 100%;animation:ml-pop .7s cubic-bezier(.2,1.45,.4,1) both}
+@keyframes ml-pop{0%{transform:scale(.2,.05);opacity:0}60%{opacity:1}100%{transform:none;opacity:1}}
+.ml-dust circle{transform-box:fill-box;transform-origin:center;animation:ml-dust .8s ease-out both}
+@keyframes ml-dust{0%{opacity:.9;transform:scale(.3)}100%{opacity:0;transform:scale(1.6)}}
+.ml-flag{animation:ml-up .4s ease-out 2s both}
+.ml-zoom{animation:ml-zoom 1.6s cubic-bezier(.2,1.1,.4,1) .2s both}
+@keyframes ml-zoom{from{opacity:0;transform:scale(.6)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){#isle-mile,.ml-lab,.ml-t,.ml-s,.ml-next,.ml-go,.ml-pop,.ml-dust circle,.ml-flag,.ml-zoom{animation:none}.ml-dust{display:none}}
+.is-ms>button{font:inherit;border:1px solid var(--accent);background:var(--accent-soft);border-radius:12px;padding:6px 4px;text-align:center;font-size:.72rem;color:var(--muted);line-height:1.35;cursor:pointer;min-height:44px}
+.is-ms>button b{display:block;font-size:.78rem;color:var(--ink)}
 
 /* 進階班工地專用樣式（由預覽頁抽出 adv-* 規則）；基礎班 isle.css 另外一起載入 */
 .adv-fin{margin:8px 14px 0;border:1px solid #E7C977;background:color-mix(in srgb,#F6C944 12%,var(--surface));border-radius:14px;padding:10px 12px;display:grid;gap:2px;font-size:.86rem}
@@ -1553,7 +1579,7 @@ function fireworks(){ const C=["#F6C944","#E25B6B","#6DD3A2","#7FB2FF"]; return 
    build_adv.py 會把 helpers.js、adv_isle.js 與本檔包成一個模組，接在 adv_app.js 後面。
    只讀現有進度（done、first、retry、ordFirst、ends、start），不改任何既有 key。
    新增紀錄（皆以職務分開）：xfadv-isleSig（上次看過的工地狀態）、isleTrees（稽查員送的樹）、
-   isleInsp（本週稽查員）、isleEv（停電兩回合）、isleAud（外部稽核 W4/W8/W12）、islePlaq（實踐牌）、isleParty（已播過全對慶祝的週）。
+   isleInsp（本週稽查員）、isleEv（停電兩回合）、isleAud（外部稽核 W4/W8/W12）、islePlaq（實踐牌）、isleParty（已播過全對慶祝的週）、isleMile（已播過的四週完工動畫）。
    ========================================================== */
 const ADEFS=DEFS.replace("</defs>",`<linearGradient id="adv-glass" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#D8EEF8"/><stop offset=".5" stop-color="#9CCBE2"/><stop offset="1" stop-color="#6FA8C6"/></linearGradient>
  <linearGradient id="adv-wash" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="#FFE3A0" stop-opacity=".85"/><stop offset="1" stop-color="#FFE3A0" stop-opacity="0"/></linearGradient>
@@ -1568,7 +1594,7 @@ function skyDecor(key){
   if(key==="E1") return `<circle cx="302" cy="34" r="12" fill="#FFF3D0"/><circle cx="307" cy="30" r="10" fill="#22305F"/>`+[[30,24],[80,40],[140,16],[200,30],[250,18],[340,60]].map(([x,y],i)=>`<circle class="tw" cx="${x}" cy="${y}" r="1.4" fill="#FFF6D6" style="animation-delay:-${i*.5}s"/>`).join("");
   return `<circle cx="70" cy="70" r="40" fill="#FFD9A0" opacity=".45"/>`; }
 
-const VER="工地版本 1028-1";
+const VER="工地版本 1030-1";
 const RN={qa:"衛管",prod:"生管",line:"生產主管"};
 const STG=[["概念","整地"],["應用","鋼構吊車"],["練習","外牆窗戶"],["共同課","設備招牌"],["案例","啟用看結局"]];
 const ER=["E1","E2","E3","E4"];
@@ -1672,7 +1698,7 @@ function panelHTML(){ useRole();
   let body;
   if(view==="area"){ let gold=0,built=0; for(let w=1;w<=WEEKS;w++){ if(stageOf(w)===5){ built++; if(endOf(w)==="E1") gold++; } }
     const pq=Object.keys(getR("islePlaq",{})).length;
-    body=`<div class="is-view">${areaSVG()}</div><div class="adv-certs"><span>外部稽核證書</span>${[4,8,12].map((m,i)=>`<i class="${i<certs()?"on":""}">${i<certs()?"✓":"W"+m}</i>`).join("")}</div><p class="is-tap">${RN[role()]} · 已完工 ${built} / 16 棟 · 全對 ${gold} / 16 · 實踐牌 ${pq} · 樹 ${trees()} 棵</p>`; }
+    body=`<div class="is-view">${areaSVG()}</div><div class="adv-certs"><span>外部稽核證書</span>${[4,8,12].map((m,i)=>`<i class="${i<certs()?"on":""}">${i<certs()?"✓":"W"+m}</i>`).join("")}</div><p class="is-tap">${RN[role()]} · 已完工 ${built} / 16 棟 · 全對 ${gold} / 16 · 實踐牌 ${pq} · 樹 ${trees()} 棵</p>${mileChips()}`; }
   else { const vw=renovNext&&renovNext.W===W; body=`<div class="is-view">${siteSVG(W,{an:anNext,renov:vw})}</div>${vw?`<div class="adv-banner">翻修完成：${star(4-ER.indexOf(renovNext.from))} → ${star(4-ER.indexOf(endOf(W)))}</div>`:""}${stepsHTML(stg)}${finishHTML(W)}`; }
   anNext=null; renovNext=null;
   const n=nextAfter();
@@ -1714,6 +1740,40 @@ function celebrateAll(){ if(matchMedia&&matchMedia("(prefers-reduced-motion: red
   el.addEventListener("click",()=>el.remove()); document.body.appendChild(el); setTimeout(()=>el&&el.remove(),3600); }
 function partyFor(W){ if(endOf(W)!=="E1"||stageOf(W)<5) return false; const p=getR("isleParty",[]); if(p.includes(W)) return false; p.push(W); setR("isleParty",p); return true; }
 
+
+/* ---------- 四週完工動畫（2026-10-30）：第 4、8、12、16 週那一段全部完工時播一次，看全區可以重看 ---------- */
+const ML_NUM=["一","二","三","四"], ML_TT=["恭喜完成四週課程！","恭喜完成八週課程！","恭喜完成十二週課程！","恭喜完成全部 16 週課程！"];
+let partyAfterMile=false;
+function mileOk(b){ for(let x=b*4-3;x<=b*4;x++) if(stageOf(x)<5) return false; return true; }
+function mileDue(w){ const b=Math.ceil(w/4); if(b<1||b>4||!mileOk(b)) return 0; const s=getR("isleMile",[]); if(s.includes(b)) return 0; s.push(b); setR("isleMile",s); return b; }
+function mileRowSVG(b){ useRole();
+  PR={cx:70,cy:40,a:56,b:28};
+  let s=ADEFS+`<rect x="-60" y="-60" width="520" height="420" fill="url(#sky-E3)"/>`+skyDecor("E3");
+  s+=box(-.08,-.1,4.16,1.2,.14,"#8A6440",-.15,{left:"#9A7048",right:"#6E4E30",top:"#E9E2D4"});
+  for(let i=0;i<4;i++){ const w=b*4-3+i, save=PR; PR={...PR,cx:PR.cx+i*PR.a,cy:PR.cy+i*PR.b};
+    s+=box(.04,.04,.92,.92,.02,"var(--is-soil-dk)",0,{top:"var(--is-grass-hi)"});
+    const bl=advBuilding(w,5,{spec:specOf(w),end:endOf(w),tier:tierOf(w),lite:true}).replace(/class="(is|adv)-(walk|hop|blink|fan|steam|sway|bulb|jet)[^"]*"/g,'');
+    const c=P(.5,.5,.05), d=(.25+i*.42).toFixed(2), k=K();
+    s+=`<g class="ml-dust">${[[-26,4],[24,8],[0,-6]].map(([x,y])=>`<circle cx="${f1(c[0]+x*k)}" cy="${f1(c[1]+y*k)}" r="${f1(9*k)}" fill="#F3F1EC" style="animation-delay:${d}s"/>`).join("")}</g>`;
+    s+=`<g class="ml-pop" style="animation-delay:${d}s"><g transform="translate(0,${f1(-.03*PR.a)})">${bl}</g></g>`; PR=save; }
+  const fp=P(4.05,.95,0);
+  s+=`<g class="ml-flag" transform="translate(${f1(fp[0])},${f1(fp[1])})"><path d="M0 0 v-44" stroke="#7D8792" stroke-width="2"/><path d="M0 -44 h42 l-6 8 l6 8 h-42z" fill="#F0C33C"/><text x="19" y="-33" text-anchor="middle" font-size="8.5" font-weight="700" fill="#5A4416" font-family="var(--f-body)">W${b*4-3}–W${b*4}</text></g>`;
+  return `<svg viewBox="6 -26 300 226" role="img" aria-label="第 ${b*4-3} 到 ${b*4} 週的四棟建築依序完工">${s}</svg>`; }
+function mileOpen(b){
+  let el=document.getElementById("isle-mile");
+  if(!el){ el=document.createElement("div"); el.id="isle-mile"; el.setAttribute("role","dialog"); el.setAttribute("aria-modal","true"); el.setAttribute("aria-labelledby","ml-t"); document.body.appendChild(el); }
+  const ws=[0,1,2,3].map(i=>b*4-3+i), fin=b===4;
+  let gold=0; for(let w=1;w<=WEEKS;w++) if(endOf(w)==="E1") gold++;
+  const labels=fin?`<div class="ml-lab wide"><span>${RN[role()]} · 16 棟全部落成 · 全對 ${gold} / 16 · 證書 ${certs()} / 3</span></div>`
+    :`<div class="ml-lab">${ws.map(w=>`<span><b style="color:#C98A12">${star(4-ER.indexOf(endOf(w)))}</b>${esc(specOf(w).n)}</span>`).join("")}</div>`;
+  const next=fin?"總部落成，整座園區完工。結業卡在「我的進度 → 獎章」最上面。":`外部稽核員會來訪，兩回合都通過可以拿到第 ${b*4} 週證書。還沒拿到 ★★★★ 的建築，重玩案例就能翻修升級。`;
+  el.innerHTML=`<div class="ml-box"><span class="ml-eye">${RN[role()]} · ${fin?"結業 · W1–W16":`第${ML_NUM[b-1]}階段 · W${ws[0]}–W${ws[3]}`}</span>${fin?`<div class="ml-zoom">${areaSVG()}</div>`:mileRowSVG(b)}${labels}<h2 class="ml-t" id="ml-t">${ML_TT[b-1]}</h2><p class="ml-s">${fin?"一整座進階園區，都是你一輪一輪判斷出來的。":"四棟建築全部落成，園區開始有樣子了。"}</p><div class="ml-next">${next}</div><button type="button" class="ml-go" data-isle="mileok">太好了，繼續</button></div>`;
+  el.hidden=false; document.documentElement.classList.add("is-lock");
+  if(partyAfterMile){ partyAfterMile=false; setTimeout(celebrateAll,2400); }
+  setTimeout(()=>{ const g=el.querySelector(".ml-go"); if(g&&!el.hidden) g.focus({preventScroll:true}); },3200); }
+function mileClose(){ const el=document.getElementById("isle-mile"); if(el) el.hidden=true; if(!openNow) document.documentElement.classList.remove("is-lock"); }
+function mileChips(){ return `<div class="is-ms">${[1,2,3,4].map(b=>mileOk(b)?`<button type="button" data-isle="mile" data-b="${b}" aria-label="重看第 ${b*4-3} 到 ${b*4} 週完工動畫"><b>W${b*4-3}–${b*4}</b>重看動畫 ▶</button>`:`<div><b>W${b*4-3}–${b*4}</b>第 ${b*4} 週解鎖</div>`).join("")}</div>`; }
+
 /* ---------- 掛勾（adv_app.js 呼叫） ---------- */
 window.isleThumbHTML=function(){ if(!st.role) return ""; const W=curWeek(), ev=evState(), ins=inspState(), au=audState();
   PR={cx:180,cy:124,a:122,b:61}; const c=P(.5,.5,.28);
@@ -1722,7 +1782,10 @@ window.isleThumbHTML=function(){ if(!st.role) return ""; const W=curWeek(), ev=e
   return `<button type="button" class="is-thumb ${go!=="open"?"alert":""}" data-isle="${go}" aria-label="${go==="open"?"打開本週工地":tag+"，點了直接作答"}">${siteSVG(W,{vb:`${f1(c[0]-118)} ${f1(c[1]-82)} 236 150`})}<span>${go!=="open"?'<i class="is-dot"></i>':""}${tag}</span></button>`; };
 window.isleCelHTML=function(W){ if(!st.role) return ""; const stg=stageOf(W); markSeen();
   PR={cx:180,cy:124,a:122,b:61}; const c=P(.5,.5,.3);
-  if(stg===5&&partyFor(W)) setTimeout(celebrateAll,700);
+  const mb=stg===5?mileDue(W):0;
+  /* 同時拿到全對與四週完工：煙火放在四棟落成之後，只放一次 */
+  if(stg===5&&partyFor(W)){ if(mb) partyAfterMile=true; else setTimeout(celebrateAll,700); }
+  if(mb) setTimeout(()=>mileOpen(mb),1800);
   return `<div class="is-cel">${siteSVG(W,{an:stg,vb:`${f1(c[0]-150)} ${f1(c[1]-112)} 300 196`})}<span class="is-celtag">${esc(specOf(W).n)} · ${STG[Math.max(0,stg-1)][1]}${stg===5?`完工 ${star(4-ER.indexOf(endOf(W)))}`:""}</span>${stg===5?sayHTML(W,endOf(W)):""}</div>`; };
 window.isleAreaCard=function(n,total){ if(!st.role) return ""; let built=0,gold=0; for(let w=1;w<=WEEKS;w++){ if(stageOf(w)===5){ built++; if(endOf(w)==="E1") gold++; } }
   return `<button type="button" class="is-areacard" data-isle="openarea" aria-label="看整座園區">${areaSVG()}<span><b>${RN[role()]} · ${n} / ${total} 關</b><span>已完工 ${built} / 16 棟 · 全對 ${gold} · 證書 ${certs()} / 3 · 實踐牌 ${Object.keys(getR("islePlaq",{})).length} · 樹 ${trees()} 棵</span></span></button>`; };
@@ -1733,14 +1796,16 @@ function isleSig(){ if(!st.role) return ""; const W=curWeek(), ev=evState(), ins
   return [role(),W,stageOf(W),endOf(W)||"",ev&&!ev.done?ev.w+"-"+ev.r:"",ins&&!ins.done?ins.key:"",au&&!au.done?au.m:""].join("|"); }
 function markSeen(){ try{ const a=byRole("isleSig"); a[role()]=isleSig(); store.set("isleSig",a); }catch(e){} }
 window.isleBoot=function(){ if(!st.role) return; ensureHost(); const ap=document.getElementById("achpop"); if(ap&&!ap.hidden&&ap.offsetParent!==null){ setTimeout(isleBoot,800); return; } const a=byRole("isleSig"); if(a[role()]!==isleSig()) openIsle("site"); };
-window.isleBackup=function(){ const o={}; ["isleTrees","islePlaq","isleAud","isleParty"].forEach(k=>o[k]=store.get(k,null)); return o; };
-window.isleRestore=function(o){ if(!o) return; ["isleTrees","islePlaq","isleAud","isleParty"].forEach(k=>{ if(o[k]&&!store.get(k,null)) store.set(k,o[k]); }); };
+window.isleBackup=function(){ const o={}; ["isleTrees","islePlaq","isleAud","isleParty","isleMile"].forEach(k=>o[k]=store.get(k,null)); return o; };
+window.isleRestore=function(o){ if(!o) return; ["isleTrees","islePlaq","isleAud","isleParty","isleMile"].forEach(k=>{ if(o[k]&&!store.get(k,null)) store.set(k,o[k]); }); };
 
 document.addEventListener("click",e=>{
   const a=e.target.closest("[data-isle]"); if(!a) return; const act=a.dataset.isle;
   if(act==="open"){ openIsle("site"); return; }
   if(act==="openarea"){ openIsle("area"); return; }
   if(act==="close"){ closeIsle(); render(); return; }
+  if(act==="mile"){ mileOpen(+a.dataset.b); return; }
+  if(act==="mileok"){ mileClose(); return; }
   if(act==="vsite"||act==="varea"){ view=act==="vsite"?"site":"area"; refresh(); return; }
   if(act==="start"){ closeIsle(); const n=nextAfter(); if(n) goL(n.W,n.L); else { st.tab="today"; render(); } return; }
   if(act==="plaque"){ const w=+a.dataset.w, p=getR("islePlaq",{}); if(p[w]) delete p[w]; else p[w]=todayStr; setR("islePlaq",p); refresh(); return; }
@@ -1763,8 +1828,8 @@ document.addEventListener("click",e=>{
   if(act==="qround"&&qCur){ qCur.s.r=1; if(qCur.kind==="ev") setR("isleEv",qCur.s); else saveAud(qCur.s); qOpen(askHTML(qCur.kind,qCur.s)); return; }
   if(act==="qdone"){ markSeen(); qClose(); return; }
 });
-document.addEventListener("keydown",e=>{ if(e.key==="Escape"){ if(qMode) qClose(); else if(openNow){ closeIsle(); render(); } } });
-window.__advIsleTest={siteSVG,areaSVG,evState,inspState,audState,openIsle,curWeek};
+document.addEventListener("keydown",e=>{ if(e.key==="Escape"){ const ml=document.getElementById("isle-mile"); if(ml&&!ml.hidden){ mileClose(); return; } if(qMode) qClose(); else if(openNow){ closeIsle(); render(); } } });
+window.__advIsleTest={mileOpen,mileRowSVG,siteSVG,areaSVG,evState,inspState,audState,openIsle,curWeek};
 
 })();
 render();isleBoot();
