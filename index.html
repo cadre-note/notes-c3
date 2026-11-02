@@ -332,6 +332,17 @@ dl.det dd{margin:0 0 4px}
 .reading dd{margin:0 0 4px;font-size:.92rem}
 .reading .rq{background:var(--accent-soft);border-radius:10px;padding:8px 10px;font-size:.9rem}
 
+/* 銅牌提示（2026-11-02，同基礎班） */
+.wall .mbtn{font:inherit;color:inherit;background:none;border:1.5px dashed transparent;border-radius:12px;padding:4px 2px;cursor:pointer}
+.wall .mbtn:hover,.wall .mbtn.on{border-color:var(--accent);background:var(--accent-soft)}
+.wall .mbtn:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.mhint{margin:8px 0 0;text-align:center}
+.mtip{margin-top:10px;border:1px solid var(--line);border-left:4px solid #C98A55;border-radius:12px;padding:10px 12px;background:var(--surface)}
+.mtip b{font-size:.92rem}.mtip p{margin:4px 0 6px}
+.mtip ul{list-style:none;margin:0;padding:0;display:grid;gap:6px}
+.mtip li{display:flex;align-items:center;justify-content:space-between;gap:8px;font-size:.86rem;line-height:1.4}
+.mtip li .btn{flex:none;min-height:40px;padding:6px 14px}
+
 /* ===== 共同知識卡片（基礎班、進階班共用）===== */
 :root{--kx-apricot:#E9893F;--kx-apricot-soft:#FDEBD9;--kx-apricot-ink:#9A4F12}
 @media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--kx-apricot:#F2A866;--kx-apricot-soft:#3A2A1C;--kx-apricot-ink:#F7C99B}}
@@ -696,6 +707,12 @@ function weekTier(W,r=st.role){
       if(p.length===b.i.length){ ans++; if(p.some((v,i)=>v!==i)&&!st.ordOk[b.key]&&!okNow) wrong++; } } });
   if(ans<total) return "bronze"; return wrong?"silver":"gold";
 }
+/* 還沒作答的題目（銅牌提示用，2026-11-02）：{L,S,b,kind,pick,n} */
+function weekMissing(W,r=st.role){ const out=[]; for(let L=0;L<4;L++){ const l=lesson(W,L,r); (l&&l.slides||[]).forEach((sl,S)=>sl.forEach(b=>{
+    if(b.k==="quiz"&&st.first[b.key]===undefined) out.push({L,S,b,kind:"測驗題"});
+    else if(b.k==="order"&&(st.ordFirst[b.key]||[]).length!==b.i.length&&!st.ordOk[b.key]) out.push({L,S,b,kind:"排序題",pick:(st.ord[b.key]||[]).length,n:b.i.length}); })); }
+  return out; }
+function missLabel(m){ return `${m.L<3?`第 ${m.L+1} 關`:"共同課"} · 卡 ${m.S+1} ${m.kind}${m.kind==="排序題"?`（已選 ${m.pick}／${m.n}）`:""}`; }
 function endTier(e){ return {E1:"gold",E2:"silver",E3:"bronze"}[e]||null; }
 function caseTier(W){ const e=st.ends[W]||[]; return e.includes("E1")?"gold":e.includes("E2")?"silver":e.includes("E3")?"bronze":null; }
 function medalCount(){ let n=0; for(let W=1;W<=WEEKS;W++){ if(weekTier(W)) n++; if(caseTier(W)) n++; } return n; }
@@ -848,14 +865,16 @@ function progView(){
   const seg=`<div class="pseg" role="tablist" aria-label="我的進度">${[["medal","獎章"],["prog","進度"],["note","筆記"]].map(([k,t])=>`<button type="button" role="tab" aria-selected="${pt===k}" data-act="ptab" data-v="${k}">${t}</button>`).join("")}</div>`;
   if(pt==="medal"){
     const tiers=DATA.weeks.map((_,i)=>weekTier(i+1)); const tn={gold:0,silver:0,bronze:0}; tiers.forEach(t=>{ if(t) tn[t]++; });
-    const wall=DATA.weeks.map((w,i)=>`<div class="c">${medal(tiers[i],DATA.motifs[r][i],"W"+(i+1))}<span>${esc(w.title[r])}</span></div>`).join("");
+    const wall=DATA.weeks.map((w,i)=>tiers[i]==="bronze"?`<button type="button" class="c mbtn ${st.mtipW===i+1?"on":""}" data-act="mtip" data-w="${i+1}" aria-expanded="${st.mtipW===i+1}" aria-label="第 ${i+1} 週銅牌，看怎麼升級">${medal(tiers[i],DATA.motifs[r][i],"W"+(i+1))}<span>${esc(w.title[r])}</span></button>`:`<div class="c">${medal(tiers[i],DATA.motifs[r][i],"W"+(i+1))}<span>${esc(w.title[r])}</span></div>`).join("");
+    const mw=st.mtipW, ms=mw&&tiers[mw-1]==="bronze"?weekMissing(mw):[];
+    const mtip=ms.length?`<div class="mtip"><b>第 ${mw} 週 · 銅牌：還有 ${ms.length} 題沒完成</b><p class="small">答完就能升級；第一次就答對（排序題排對過）是金牌。</p><ul>${ms.map((m,j)=>`<li><span>${esc(missLabel(m))}</span><button type="button" class="btn ghost" data-act="miss" data-w="${mw}" data-j="${j}">前往</button></li>`).join("")}</ul></div>`:"";
     const cwall=DATA.weeks.map((w,i)=>`<div class="c">${medal(caseTier(i+1),w.case.motif,"C"+(i+1))}<span>${esc(w.case.title)}</span></div>`).join("");
     const ach=ACH.map(a=>{const on=st.ach.includes(a.k);return `<div class="a ${on?"on":""}"><div class="ic">${on?"★":"？"}</div><div><b>${on?a.t:"隱藏成就"}</b><span>${on?esc(a.how):"提示："+esc(a.hint)}</span></div></div>`;}).join("");
     let grad="";
     if(st.done[lid(WEEKS,4)]){ let gd=store.get("grad",""); if(!gd){ gd=todayStr; store.set("grad",gd); }
       const cg=DATA.weeks.filter((_,i)=>caseTier(i+1)==="gold").length;
       grad=`<section class="card grad"><div class="eyebrow">雪坊幹部學堂 · 進階班</div><h2>結業</h2><p class="gr-role">${esc(ROLES[r])} · 完成 16 週課程與結業挑戰</p><div class="gr-st"><div><b>${tn.gold}</b><span>週金牌</span></div><div><b>${tn.silver}</b><span>週銀牌</span></div><div><b>${cg}</b><span>案例金牌</span></div><div><b>${st.ach.length}/${ACH.length}</b><span>隱藏成就</span></div></div><p class="small">結業日 ${esc(gd)} · 累積學習 ${st.days.length} 天。這張卡不記名，截圖就是你的結業紀錄。</p></section>`; }
-    return seg+grad+`<section class="card"><h2>週獎章</h2><p class="small">金 ${tn.gold} · 銀 ${tn.silver} · 銅 ${tn.bronze}。5 關完成是銅牌；測驗題都答完是銀牌；第一次作答就全對是金牌（排序題重排排對也算）。</p><div class="wall">${wall}</div></section>
+    return seg+grad+`<section class="card"><h2>週獎章</h2><p class="small">金 ${tn.gold} · 銀 ${tn.silver} · 銅 ${tn.bronze}。5 關完成是銅牌；測驗題都答完是銀牌；第一次作答就全對是金牌（排序題重排排對也算）。</p><div class="wall">${wall}</div>${tn.bronze?`<p class="small mhint">點銅牌，看還差什麼就能升級</p>`:""}${mtip}</section>
     <section class="card"><h2>案例獎章</h2><p class="small">週五案例走到越好的結局，顏色越好；可以重玩升級。</p><div class="wall">${cwall}</div></section>
     <section class="card"><h2>隱藏成就 · ${st.ach.length}/${ACH.length}</h2><p class="small">沒拿到前只看得到提示，拿到才顯示名稱和條件。</p><div class="ach">${ach}</div></section>`;
   }
@@ -989,6 +1008,8 @@ document.addEventListener("click",e=>{
   else if(act==="retry"){ st.retryOpen[t.dataset.key]=1; render(); }
   else if(act==="ordreset"){ delete st.ord[t.dataset.key]; store.set("ord",st.ord); render(); }
   else if(act==="ptab"){ st.ptab=t.dataset.v; render(); }
+  else if(act==="mtip"){ const w=+t.dataset.w; st.mtipW=st.mtipW===w?null:w; render(); }
+  else if(act==="miss"){ const m=weekMissing(+t.dataset.w)[+t.dataset.j||0]; st.mtipW=null; if(m){ goL(+t.dataset.w,m.L); st.S=m.S; render(); } }
   else if(act==="ktab"){ st.ktab=t.dataset.v; render(); }
   else if(act==="hideresume"){ st.resumed=false; render(); }
   else if(act==="copynote"){ copyText(st.notes[lid(st.W,st.L)]||""); }
