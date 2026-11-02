@@ -669,7 +669,7 @@ const ACH=DATA.ach;
 /* ================= 狀態 ================= */
 const todayStr=(()=>{ const d=new Date(); return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`; })();
 let st={role:store.get("role",null),tab:"today",ptab:null,ktab:"news",flow:"yogurt",W:1,L:0,S:0,cel:false,resumed:false,onb:0,swiped:store.get("swiped",false),slideDir:null,
-  first:store.get("first",{}),retry:store.get("retry",{}),retryOpen:{},ord:store.get("ord",{}),ordFirst:store.get("ordFirst",{}),
+  first:store.get("first",{}),retry:store.get("retry",{}),retryOpen:{},ord:store.get("ord",{}),ordFirst:store.get("ordFirst",{}),ordOk:store.get("ordOk",{}),
   notes:store.get("notes",{}),done:store.get("done",{}),ach:store.get("ach",[]),days:store.get("days",[]),ends:store.get("ends",{}),
   start:store.get("start",null),rolesSeen:store.get("rolesSeen",[]),terms:store.get("terms",[]),cs:{},sheet:null};
 
@@ -691,7 +691,9 @@ function weekTier(W,r=st.role){
   let total=0,ans=0,wrong=0;
   allQuizBlocks(W,r).forEach(b=>{ total++;
     if(b.k==="quiz"){ if(st.first[b.key]!==undefined){ ans++; if(st.first[b.key]!==b.a) wrong++; } }
-    else { const p=st.ordFirst[b.key]||[]; if(p.length===b.i.length){ ans++; if(p.some((v,i)=>v!==i)) wrong++; } } });
+    /* 排序題（2026-11-02 放寬）：排對過一次就算對（xfadv-ordOk），第一次排錯、重排排對也是金牌 */
+    else { const p=st.ordFirst[b.key]||[], c=st.ord[b.key]||[], okNow=c.length===b.i.length&&c.every((v,i)=>v===i);
+      if(p.length===b.i.length){ ans++; if(p.some((v,i)=>v!==i)&&!st.ordOk[b.key]&&!okNow) wrong++; } } });
   if(ans<total) return "bronze"; return wrong?"silver":"gold";
 }
 function endTier(e){ return {E1:"gold",E2:"silver",E3:"bronze"}[e]||null; }
@@ -789,7 +791,7 @@ function lessonView(){
 }
 function celView(){
   const t=weekTier(st.W), full=weekDone(st.W)===5;
-  const hint=t==="gold"?"第一次作答就全對":t==="silver"?"題目都答了；金牌要第一次就全對":"還有題目沒作答，答完就能升級";
+  const hint=t==="gold"?"第一次作答就全對":t==="silver"?"題目都答了；金牌要第一次就全對（排序題重排排對也算）":"還有題目沒作答，答完就能升級";
   return `<section class="card in"><div class="cel">${window.isleCelHTML?isleCelHTML(st.W):""}<h2>完成這一關</h2>${full?`${medal(t,DATA.motifs[st.role][st.W-1],"W"+st.W,{anim:true})}<b>獲得第 ${st.W} 週${MET[t].n}牌</b><p class="small">${hint}</p>`:`<p>今天的 3 分鐘完成了。</p>`}
   <div class="btns">${navBtns("繼續下一關")}<button type="button" class="btn ghost" data-act="closecel">回顧這一關</button></div></div></section>`;
 }
@@ -832,10 +834,10 @@ function todayView(){
 }
 
 /* ================= 我的進度 ================= */
-function backupCode(){ const o={v:1,role:st.role,done:st.done,first:st.first,ordFirst:st.ordFirst,ends:st.ends,ach:st.ach,days:st.days,start:st.start,notes:st.notes,retry:st.retry,rolesSeen:st.rolesSeen,terms:st.terms,isle:window.isleBackup?isleBackup():null};
+function backupCode(){ const o={v:1,role:st.role,done:st.done,first:st.first,ordFirst:st.ordFirst,ordOk:st.ordOk,ends:st.ends,ach:st.ach,days:st.days,start:st.start,notes:st.notes,retry:st.retry,rolesSeen:st.rolesSeen,terms:st.terms,isle:window.isleBackup?isleBackup():null};
   try{ return "XFA1."+btoa(unescape(encodeURIComponent(JSON.stringify(o)))); }catch(e){ return ""; } }
 function restoreCode(code){ try{ const s=code.trim(); if(!s.startsWith("XFA1.")) return false; const o=JSON.parse(decodeURIComponent(escape(atob(s.slice(5)))));
-  ["done","first","ordFirst","ends","notes","retry"].forEach(k=>{ st[k]=Object.assign({},o[k]||{},st[k]); store.set(k,st[k]); });
+  ["done","first","ordFirst","ordOk","ends","notes","retry"].forEach(k=>{ st[k]=Object.assign({},o[k]||{},st[k]); store.set(k,st[k]); });
   ["ach","days","rolesSeen","terms"].forEach(k=>{ st[k]=[...new Set([...(st[k]||[]),...(o[k]||[])])]; store.set(k,st[k]); });
   if(o.start&&(!st.start||o.start<st.start)){ st.start=o.start; store.set("start",st.start); }
   if(!st.role&&o.role){ st.role=o.role; store.set("role",st.role); }
@@ -853,7 +855,7 @@ function progView(){
     if(st.done[lid(WEEKS,4)]){ let gd=store.get("grad",""); if(!gd){ gd=todayStr; store.set("grad",gd); }
       const cg=DATA.weeks.filter((_,i)=>caseTier(i+1)==="gold").length;
       grad=`<section class="card grad"><div class="eyebrow">雪坊幹部學堂 · 進階班</div><h2>結業</h2><p class="gr-role">${esc(ROLES[r])} · 完成 16 週課程與結業挑戰</p><div class="gr-st"><div><b>${tn.gold}</b><span>週金牌</span></div><div><b>${tn.silver}</b><span>週銀牌</span></div><div><b>${cg}</b><span>案例金牌</span></div><div><b>${st.ach.length}/${ACH.length}</b><span>隱藏成就</span></div></div><p class="small">結業日 ${esc(gd)} · 累積學習 ${st.days.length} 天。這張卡不記名，截圖就是你的結業紀錄。</p></section>`; }
-    return seg+grad+`<section class="card"><h2>週獎章</h2><p class="small">金 ${tn.gold} · 銀 ${tn.silver} · 銅 ${tn.bronze}。5 關完成是銅牌；測驗題都答完是銀牌；第一次作答就全對是金牌。</p><div class="wall">${wall}</div></section>
+    return seg+grad+`<section class="card"><h2>週獎章</h2><p class="small">金 ${tn.gold} · 銀 ${tn.silver} · 銅 ${tn.bronze}。5 關完成是銅牌；測驗題都答完是銀牌；第一次作答就全對是金牌（排序題重排排對也算）。</p><div class="wall">${wall}</div></section>
     <section class="card"><h2>案例獎章</h2><p class="small">週五案例走到越好的結局，顏色越好；可以重玩升級。</p><div class="wall">${cwall}</div></section>
     <section class="card"><h2>隱藏成就 · ${st.ach.length}/${ACH.length}</h2><p class="small">沒拿到前只看得到提示，拿到才顯示名稱和條件。</p><div class="ach">${ach}</div></section>`;
   }
@@ -967,6 +969,7 @@ document.addEventListener("click",e=>{
   if(t.dataset.ans){ if(st.first[t.dataset.ans]===undefined){ st.first[t.dataset.ans]=+t.dataset.i; store.set("first",st.first); touchDay(); } render(); return; }
   if(t.dataset.retry){ const k=t.dataset.retry; st.retry[k]=+t.dataset.i; store.set("retry",st.retry); const b=findBlock(k); if(b&&st.retry[k]===b.a) unlock("retry"); render(); return; }
   if(t.dataset.ord){ const k=t.dataset.ord, b=findBlock(k); const p=st.ord[k]||[]; p.push(+t.dataset.i); st.ord[k]=p; store.set("ord",st.ord);
+    if(p.length===b.i.length&&p.every((v,i)=>v===i)&&!st.ordOk[k]){ st.ordOk[k]=1; store.set("ordOk",st.ordOk); }
     if(p.length===b.i.length){ if(!st.ordFirst[k]){ st.ordFirst[k]=p.slice(); store.set("ordFirst",st.ordFirst); } else if(p.every((v,i)=>v===i)) unlock("retry"); }
     touchDay(); render(); return; }
   if(t.dataset.case!==undefined){ st.cs[st.W].pick=+t.dataset.case; touchDay(); render(); return; }
