@@ -828,7 +828,7 @@ function nsShowCover(f,r,markSeen,o){
   const close=go=>{ markSeen(); host.classList.add("out"); document.documentElement.classList.remove("ns-lock"); setTimeout(()=>host.remove(),260); if(go) o.openNews(); };
   host.addEventListener("click",e=>{ const b=e.target.closest("[data-ns]"); if(b) close(b.dataset.ns==="news"); });
   document.addEventListener("keydown",function k(e){ if(e.key==="Escape"&&document.body.contains(host)){ close(false); document.removeEventListener("keydown",k); } });
-  const s=host.querySelector(".ns-start"); if(s) s.focus();
+  const s=host.querySelector(".ns-start"); if(s) s.focus({preventScroll:true}); host.scrollTop=0;
 }
 
 /* 雪坊幹部學堂 進階班：完整版引擎。資料由 build_adv.py 注入 DATA。 */
