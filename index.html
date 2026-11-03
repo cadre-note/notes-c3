@@ -430,24 +430,21 @@ html.ns-lock,html.ns-lock body{overflow:hidden}
   padding:calc(14px + env(safe-area-inset-top,0px)) max(18px,env(safe-area-inset-right,0px)) calc(18px + env(safe-area-inset-bottom,0px)) max(18px,env(safe-area-inset-left,0px))}
 #ns-cover.out{opacity:0;transform:translateY(-12px)}
 .ns-pp{max-width:520px;min-height:100%;margin:0 auto;display:flex;flex-direction:column;gap:16px;position:relative}
-.ns-skip{position:absolute;top:-4px;right:-6px;border:0;background:transparent;color:var(--muted);font:500 .82rem var(--f-body);cursor:pointer;padding:6px}
-.ns-mast{border-bottom:3px double var(--ns-rule);padding:14px 0 6px;display:grid;gap:2px;text-align:center}
+.ns-skip{position:absolute;top:0;right:-6px;border:0;background:transparent;color:var(--muted);font:500 .82rem var(--f-body);cursor:pointer;padding:6px}
+.ns-mast{border-bottom:3px double var(--ns-rule);padding:30px 0 6px;display:grid;gap:2px;text-align:center}
 .ns-nm{font:900 1.6rem/1.2 "Noto Serif TC","PingFang TC",serif;letter-spacing:.12em}
 .ns-dt{font-size:.75rem;color:var(--muted);letter-spacing:.06em}
 .ns-kick{font-size:.72rem;font-weight:700;letter-spacing:.1em;color:var(--muted);display:flex;justify-content:space-between;gap:8px;border-bottom:1px solid var(--line);padding-bottom:4px}
 .ns-hl,.ns-sec{display:grid;gap:8px;border:0;background:none;text-align:left;font:inherit;color:inherit;padding:0;cursor:pointer}
 .ns-hl{gap:10px}
-.ns-hl h2{margin:0;font:900 1.42rem/1.5 "Noto Serif TC","PingFang TC",serif;letter-spacing:.02em;text-wrap:balance}
-.ns-hp{margin:0;font-size:1rem;line-height:1.85;letter-spacing:.03em}
-.ns-guard{display:grid;gap:4px;border-radius:12px;padding:10px 12px;background:var(--ns-tag-bg);font-size:.94rem;line-height:1.75;letter-spacing:.02em}
-.ns-guard b{font-size:.78rem;letter-spacing:.08em;color:var(--muted)}
-.ns-guard.micro{background:var(--ns-micro-bg)}.ns-guard.micro b{color:var(--ns-micro)}
-.ns-guard.foreign{background:var(--ns-for-bg)}.ns-guard.foreign b{color:var(--ns-for)}
-.ns-guard.allergen{background:var(--ns-all-bg)}.ns-guard.allergen b{color:var(--ns-all)}
-.ns-guard.chem{background:var(--ns-chem-bg)}.ns-guard.chem b{color:var(--ns-chem)}
-.ns-guard.label{background:var(--ns-lab-bg)}.ns-guard.label b{color:var(--ns-lab)}
-.ns-q{margin:0;font-size:.94rem;line-height:1.75;letter-spacing:.02em;display:grid;gap:2px}
-.ns-q b{font-size:.78rem;letter-spacing:.08em;color:var(--muted)}
+.ns-hl h2{margin:0;font:900 1.55rem/1.5 "Noto Serif TC","PingFang TC",serif;letter-spacing:.02em;text-wrap:balance}
+.ns-hp{margin:0;font-size:1.03rem;line-height:1.9;letter-spacing:.03em}
+.ns-mid{flex:1;display:flex;flex-direction:column;justify-content:center;gap:18px;padding-block:6px}
+.ns-hrow{display:flex;align-items:center;gap:10px}
+.ns-hic{width:46px;height:46px;border-radius:14px;display:grid;place-items:center;flex:none;background:var(--ns-tag-bg);color:var(--ns-tag)}
+.ns-hic svg{width:28px;height:28px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+.ns-hic.micro{background:var(--ns-micro-bg);color:var(--ns-micro)}.ns-hic.foreign{background:var(--ns-for-bg);color:var(--ns-for)}
+.ns-hic.allergen{background:var(--ns-all-bg);color:var(--ns-all)}.ns-hic.chem{background:var(--ns-chem-bg);color:var(--ns-chem)}.ns-hic.label{background:var(--ns-lab-bg);color:var(--ns-lab)}
 .ns-rs{margin:0;font-size:.92rem;line-height:1.75;letter-spacing:.02em;color:var(--muted);display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
 .ns-go2{font-size:.82rem;font-weight:700;color:var(--accent)}
 .ns-sec{border-top:1px solid var(--line);padding-top:12px;gap:6px}
@@ -763,6 +760,11 @@ const NS_HAZ=[["微生物","micro",/李斯特|沙門|大腸|桿菌|球菌|黴|�
   ["化學","chem",/農藥|殘留|添加物|清潔劑|重金屬|化學|毒素|塑化劑/],
   ["標示錯誤","label",/標示|標籤|效期|日期錯/]];
 const NS_PROD=[["冰品",/冰淇淋|冰品|雪糕|義式冰|霜淇淋|冰棒/],["乳品",/優格|優酪|乳品|牛奶|鮮乳|起司|乳酪|布丁|奶油/],["果醬",/果醬|果泥|蜜餞|水果/]];
+const NS_HIC={micro:'<circle cx="12" cy="12" r="5"/><path d="M12 3v4M12 17v4M3 12h4M17 12h4M5.6 5.6l2.8 2.8M15.6 15.6l2.8 2.8M5.6 18.4l2.8-2.8M15.6 8.4l2.8-2.8"/><circle cx="10.5" cy="11" r=".8"/><circle cx="13.5" cy="13.2" r=".8"/>',
+ foreign:'<path d="M4.5 18.5l3.5-11 5 7.5z"/><path d="M12.5 11l5.5-7 1.5 10z"/><path d="M14 19.5l4-2.5 1.5 3z"/>',
+ allergen:'<path d="M9 4c-3 0-5 2.5-4 5.5.6 1.8.2 3.2-.5 4.5C3 17 5 20.5 8.5 20.5c3 0 4-2.4 6-3.4 2-1 4.5-1.3 4.5-4.6 0-3-2.6-4.4-4.7-4.4-1.6 0-2.2-1-2.8-2.3C11 5 10.2 4 9 4z"/><path d="M9 9.5h.1M12 14h.1M15 12h.1"/>',
+ chem:'<path d="M9 3h6M10 3v6l-5.5 9.5A1.7 1.7 0 006 21h12a1.7 1.7 0 001.5-2.5L14 9V3"/><path d="M7.5 15h9"/>',
+ label:'<path d="M3 12V4h8l10 10-8 8z"/><circle cx="7.5" cy="8.5" r="1.5"/>'};
 const NS_HCLS={"微生物":"micro","異物":"foreign","過敏原":"allergen","化學":"chem","標示錯誤":"label"};
 function nsHaz(e){ if(e.haz&&NS_HCLS[e.haz]) return [e.haz,NS_HCLS[e.haz]]; const t=(e.title||"")+(e.happened||"");
   for(const [n,c,re] of NS_HAZ) if(re.test(t)) return [n,c]; return null; }
@@ -818,9 +820,9 @@ function nsShowCover(f,r,markSeen,o){
   const h=f?nsHaz(f):null;
   host.innerHTML=`<div class="ns-pp"><button type="button" class="ns-skip" data-ns="close">略過 ✕</button>
     <div class="ns-mast"><span class="ns-nm">本週新知</span><span class="ns-dt">${m?`${m[1]} 年 ${+m[2]} 月 ${+m[3]} 日（${nsWeekday(d)}）`:""} · 雪坊幹部學堂</span></div>
-    ${f?`<div class="ns-kick"><span>食安頭條</span><span>${esc(f.source||"")}</span></div>
-    <button type="button" class="ns-hl" data-ns="news">${nsTags(f)}<h2>${esc(nsTitle(f))}</h2>${f.happened?`<p class="ns-hp">${esc(f.happened)}</p>`:""}${f.guard?`<div class="ns-guard ${h?h[1]:""}"><b>在我們廠怎麼擋</b><span>${esc(f.guard)}</span></div>`:""}${f.q?`<p class="ns-q"><b>想一想</b>${esc(f.q)}</p>`:""}<span class="ns-go2">看完整分析 ›</span></button>`:""}
-    ${r?`<button type="button" class="ns-sec" data-ns="news"><span class="ns-kick"><span>推薦閱讀</span><span>${esc(r.source||"")}</span></span><b>${esc(r.title||"")}</b>${r.sum?`<p class="ns-rs">${esc(r.sum)}</p>`:""}</button>`:""}
+    <div class="ns-mid">${f?`<div class="ns-kick"><span>食安頭條</span><span>${esc(f.source||"")}</span></div>
+    <button type="button" class="ns-hl" data-ns="news"><span class="ns-hrow">${h?`<span class="ns-hic ${h[1]}"><svg viewBox="0 0 24 24" aria-hidden="true">${NS_HIC[h[1]]}</svg></span>`:""}${nsTags(f)}</span><h2>${esc(nsTitle(f))}</h2>${f.happened?`<p class="ns-hp">${esc(f.happened)}</p>`:""}<span class="ns-go2">看完整分析 ›</span></button>`:""}
+    ${r?`<button type="button" class="ns-sec" data-ns="news"><span class="ns-kick"><span>推薦閱讀</span><span>${esc(r.source||"")}</span></span><b>${esc(r.title||"")}</b>${r.sum?`<p class="ns-rs">${esc(r.sum)}</p>`:""}</button>`:""}</div>
     <button type="button" class="ns-start" data-ns="close">開始今天的關卡</button><p class="ns-sub">看過的文章不會再出現在封面</p></div>`;
   document.body.appendChild(host); document.documentElement.classList.add("ns-lock");
   const close=go=>{ markSeen(); host.classList.add("out"); document.documentElement.classList.remove("ns-lock"); setTimeout(()=>host.remove(),260); if(go) o.openNews(); };
