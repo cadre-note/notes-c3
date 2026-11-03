@@ -445,7 +445,7 @@ html.ns-lock,html.ns-lock body{overflow:hidden}
 .ns-hic svg{width:28px;height:28px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
 .ns-hic.micro{background:var(--ns-micro-bg);color:var(--ns-micro)}.ns-hic.foreign{background:var(--ns-for-bg);color:var(--ns-for)}
 .ns-hic.allergen{background:var(--ns-all-bg);color:var(--ns-all)}.ns-hic.chem{background:var(--ns-chem-bg);color:var(--ns-chem)}.ns-hic.label{background:var(--ns-lab-bg);color:var(--ns-lab)}
-.ns-rs{margin:0;font-size:.92rem;line-height:1.75;letter-spacing:.02em;color:var(--muted);display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.ns-rs{margin:0;font-size:.95rem;line-height:1.75;letter-spacing:.02em;color:var(--ink);opacity:.82;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
 .ns-go2{font-size:.82rem;font-weight:700;color:var(--accent)}
 .ns-sec{border-top:1px solid var(--line);padding-top:12px;gap:6px}
 .ns-sec .ns-kick{border:0;padding:0}
@@ -771,7 +771,21 @@ function nsHaz(e){ if(e.haz&&NS_HCLS[e.haz]) return [e.haz,NS_HCLS[e.haz]]; cons
 function nsProd(e){ if(e.prod) return e.prod; const t=(e.title||"")+(e.happened||""); for(const [n,re] of NS_PROD) if(re.test(t)) return n; return "其他食品"; }
 function nsTags(e){ const h=nsHaz(e); return `<span class="ns-tags">${h?`<span class="ns-tag ${h[1]}">${h[0]}</span>`:""}<span class="ns-tag prod">${esc(nsProd(e))}</span></span>`; }
 function nsTitle(e){ const t=e.title||""; return (e.country&&!t.includes(e.country)?e.country+"｜":"")+t; }
-function nsSort(a){ return (a||[]).slice().sort((x,y)=>String(y.date||"").localeCompare(String(x.date||""))); }
+/* 半形標點換成全形（只改顯示，不動資料）；數字中的逗號、英文句子裡的標點保留 */
+const NS_CJK="[㐀-鿿＀-￯　-〿]";
+function nsFW(t){ if(typeof t!=="string") return t; return t
+  .replace(new RegExp("(?<="+NS_CJK+")\\s*,\\s*|\\s*,\\s*(?="+NS_CJK+")","g"),"，")
+  .replace(new RegExp("(?<="+NS_CJK+")\\s*;\\s*|\\s*;\\s*(?="+NS_CJK+")","g"),"；").replace(new RegExp("(?<="+NS_CJK+")[:]|[:](?="+NS_CJK+")","g"),"：")
+  .replace(new RegExp("(?<="+NS_CJK+")\\?|\\?(?=$|"+NS_CJK+")","g"),"？").replace(new RegExp("(?<="+NS_CJK+")!","g"),"！")
+  .replace(new RegExp("\\((?="+NS_CJK+")","g"),"（").replace(new RegExp("(?<=（[^()]*)\\)","g"),"）")
+  .replace(/\s*，\s*/g,"，").replace(/\s*；\s*/g,"；").replace(/\s+（/g,"（"); }
+function nsNorm(e){ const o={}; for(const k in e) o[k]=(k==="url"||k==="date")?e[k]:nsFW(e[k]); return o; }
+function nsSort(a){ return (a||[]).map(nsNorm).sort((x,y)=>String(y.date||"").localeCompare(String(x.date||""))); }
+/* 封面摘要：取完整的句子，約兩行（最多 max 字），不從句子中間切 */
+function nsBrief(t,max){ t=String(t||""); const parts=t.match(/[^。！？；]+[。！？；]?/g)||[t]; let out="";
+  for(const p of parts){ if((out+p).length>max) break; out+=p; }
+  if(!out){ const c=parts[0]; const cut=c.lastIndexOf("，",max); out=(cut>max*0.5?c.slice(0,cut):c.slice(0,max))+"…"; }
+  return out.replace(/[；，]$/,"。"); }
 function nsMD(d){ const m=String(d||"").match(/^\d{4}-(\d{2})-(\d{2})/); return m?`${+m[1]}/${+m[2]}`:esc(d||""); }
 function nsLink(e,txt){ return e.url?`<a href="${esc(e.url)}" target="_blank" rel="noopener">${esc(txt)}</a>`:`<b>${esc(txt)}</b>`; }
 function nsDL(e,keys){ return `<dl>${keys.map(([k,n])=>e[k]?`<dt>${n}</dt><dd>${esc(e[k])}</dd>`:"").join("")}</dl>`; }
@@ -822,7 +836,7 @@ function nsShowCover(f,r,markSeen,o){
     <div class="ns-mast"><span class="ns-nm">本週新知</span><span class="ns-dt">${m?`${m[1]} 年 ${+m[2]} 月 ${+m[3]} 日（${nsWeekday(d)}）`:""} · 雪坊幹部學堂</span></div>
     <div class="ns-mid">${f?`<div class="ns-kick"><span>食安頭條</span><span>${esc(f.source||"")}</span></div>
     <button type="button" class="ns-hl" data-ns="news"><span class="ns-hrow">${h?`<span class="ns-hic ${h[1]}"><svg viewBox="0 0 24 24" aria-hidden="true">${NS_HIC[h[1]]}</svg></span>`:""}${nsTags(f)}</span><h2>${esc(nsTitle(f))}</h2>${f.happened?`<p class="ns-hp">${esc(f.happened)}</p>`:""}<span class="ns-go2">看完整分析 ›</span></button>`:""}
-    ${r?`<button type="button" class="ns-sec" data-ns="news"><span class="ns-kick"><span>推薦閱讀</span><span>${esc(r.source||"")}</span></span><b>${esc(r.title||"")}</b>${r.sum?`<p class="ns-rs">${esc(r.sum)}</p>`:""}</button>`:""}</div>
+    ${r?`<button type="button" class="ns-sec" data-ns="news"><span class="ns-kick"><span>推薦閱讀</span><span>${esc(r.source||"")}</span></span><b>${esc(r.title||"")}</b>${r.sum?`<p class="ns-rs">${esc(nsBrief(r.sum,48))}</p>`:""}</button>`:""}</div>
     <button type="button" class="ns-start" data-ns="close">開始今天的關卡</button><p class="ns-sub">看過的文章不會再出現在封面</p></div>`;
   document.body.appendChild(host); document.documentElement.classList.add("ns-lock");
   const close=go=>{ markSeen(); host.classList.add("out"); document.documentElement.classList.remove("ns-lock"); setTimeout(()=>host.remove(),260); if(go) o.openNews(); };
