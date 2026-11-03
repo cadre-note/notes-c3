@@ -465,10 +465,18 @@ html.ns-lock,html.ns-lock body{overflow:hidden}
 .ns-card .ns-hic{background:var(--ns-paper)}
 .ns-card .ns-tag{background:var(--ns-paper)}
 .ns-hl{cursor:default}
-a.ns-go2{justify-self:start;text-decoration:none;color:var(--ink);font-weight:700;font-size:.85rem;background:var(--ns-paper);border-radius:999px;padding:5px 14px}
-a.ns-go2:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.ns-full summary{list-style:none;cursor:pointer;display:inline-block;color:var(--ink);font-weight:700;font-size:.85rem;background:var(--ns-paper);border-radius:999px;padding:5px 14px}
+.ns-full summary::-webkit-details-marker{display:none}
+.ns-full summary::after{content:" ▾"}.ns-full[open] summary::after{content:" ▴"}
+.ns-full[open] summary{margin-bottom:10px}
+.ns-full summary:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.ns-full dl{margin:0;display:grid;gap:2px}
+.ns-full dt{font-size:.76rem;color:var(--muted);font-weight:700;letter-spacing:.04em}
+.ns-full dd{margin:0 0 8px;font-size:.93rem;line-height:1.8;letter-spacing:.02em}
+.ns-fq{background:var(--ns-paper);border-radius:10px;padding:8px 10px;font-size:.9rem;line-height:1.75}
 .ns-sec{border-top:0;padding-top:2px}
 .ns-sec b{font-size:.95rem;font-weight:600;opacity:.85}
+.ns-full .ns-c,.ns-full[open] .ns-o{display:none}.ns-full[open] .ns-c{display:inline}
 
 /* ===== 本週工地（小島）：色票跟著學堂的深淺色 ===== */
 :root{--is-prod:#3B5BDB;--is-qa:#1E8A5A;--is-line:#D2602A;--is-sky-a:#CBE8F3;--is-sky-b:#9FD0E4;
@@ -850,7 +858,7 @@ function nsShowCover(f,r,markSeen,o){
   host.innerHTML=`<div class="ns-pp"><button type="button" class="ns-skip" data-ns="close">略過 ✕</button>
     <div class="ns-mast"><span class="ns-nm">本週新知</span><span class="ns-dt">${m?`${m[1]} 年 ${+m[2]} 月 ${+m[3]} 日（${nsWeekday(d)}）`:""} · 雪坊幹部學堂</span></div>
     <div class="ns-mid">${f?`<div class="ns-card ${h?h[1]:""}"><div class="ns-kick"><span>本週食安提醒</span><span>${esc(f.source||"")}</span></div>
-    <div class="ns-hl"><span class="ns-hrow">${h?`<span class="ns-hic ${h[1]}"><svg viewBox="0 0 24 24" aria-hidden="true">${NS_HIC[h[1]]}</svg></span>`:""}${nsTags(f)}</span><h2>${esc(nsTitle(f))}</h2>${f.happened?`<p class="ns-hp">${esc(f.happened)}</p>`:""}${f.url?`<a class="ns-go2" href="${esc(f.url)}" target="_blank" rel="noopener" data-ns-read="1">看完整文章 ›</a>`:""}</div></div>`:""}
+    <div class="ns-hl"><span class="ns-hrow">${h?`<span class="ns-hic ${h[1]}"><svg viewBox="0 0 24 24" aria-hidden="true">${NS_HIC[h[1]]}</svg></span>`:""}${nsTags(f)}</span><h2>${esc(nsTitle(f))}</h2>${f.happened?`<p class="ns-hp">${esc(f.happened)}</p>`:""}${(f.cause||f.req||f.guard||f.q)?`<details class="ns-full"><summary><span class="ns-o">看完整文章</span><span class="ns-c">收起</span></summary>${nsDL(f,[["cause","根本原因"],["req","對應要求"],["guard","在我們廠怎麼擋"]])}${f.q?`<div class="ns-fq"><b>討論：</b>${esc(f.q)}</div>`:""}</details>`:""}</div></div>`:""}
     ${r?`<button type="button" class="ns-sec" data-ns="news"><span class="ns-kick"><span>推薦閱讀</span><span>${esc(r.source||"")}</span></span><b>${esc(r.title||"")}</b></button>`:""}</div>
     <button type="button" class="ns-start" data-ns="close">開始今天的關卡</button><p class="ns-sub">看過的文章不會再出現在封面</p></div>`;
   document.body.appendChild(host); document.documentElement.classList.add("ns-lock");
