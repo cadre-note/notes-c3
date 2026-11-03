@@ -377,6 +377,76 @@ dl.det dd{margin:0 0 4px}
 @media (max-width:380px){.kx-body{padding-left:14px}}
 @media (prefers-reduced-motion: reduce){.kx-chev{transition:none}}
 
+/* ===== 時事：新知封面＋食安收納＋危害標籤（兩班共用）===== */
+:root{--ns-paper:#FBF8F1;--ns-rule:#1D2A24;
+  --ns-micro:#B3261E;--ns-micro-bg:#FBE5E3;--ns-for:#8A5A00;--ns-for-bg:#FDF0DA;--ns-all:#7A3FB0;--ns-all-bg:#F1E6FB;
+  --ns-chem:#1F5FA8;--ns-chem-bg:#E3EEFB;--ns-lab:#3F6B2E;--ns-lab-bg:#E6F3DF;--ns-tag:#5E6A75;--ns-tag-bg:#EEF0F2}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--ns-paper:#1A1E1B;--ns-rule:#D7DED9;
+  --ns-micro:#F2867E;--ns-micro-bg:#3A1A18;--ns-for:#F2B35B;--ns-for-bg:#3A2A10;--ns-all:#C9A2EE;--ns-all-bg:#2E2140;
+  --ns-chem:#8DB8F0;--ns-chem-bg:#18283D;--ns-lab:#A6D68F;--ns-lab-bg:#1D2E17;--ns-tag:#B5BFC9;--ns-tag-bg:#262E37}}
+:root[data-theme="dark"]{--ns-paper:#1A1E1B;--ns-rule:#D7DED9;
+  --ns-micro:#F2867E;--ns-micro-bg:#3A1A18;--ns-for:#F2B35B;--ns-for-bg:#3A2A10;--ns-all:#C9A2EE;--ns-all-bg:#2E2140;
+  --ns-chem:#8DB8F0;--ns-chem-bg:#18283D;--ns-lab:#A6D68F;--ns-lab-bg:#1D2E17;--ns-tag:#B5BFC9;--ns-tag-bg:#262E37}
+.ns-tags{display:flex;gap:6px;flex-wrap:wrap}
+.ns-tag{font-size:.72rem;font-weight:700;border-radius:999px;padding:1px 9px;line-height:1.6}
+.ns-tag.micro{color:var(--ns-micro);background:var(--ns-micro-bg)}
+.ns-tag.foreign{color:var(--ns-for);background:var(--ns-for-bg)}
+.ns-tag.allergen{color:var(--ns-all);background:var(--ns-all-bg)}
+.ns-tag.chem{color:var(--ns-chem);background:var(--ns-chem-bg)}
+.ns-tag.label{color:var(--ns-lab);background:var(--ns-lab-bg)}
+.ns-tag.prod{color:var(--ns-tag);background:var(--ns-tag-bg);font-weight:500}
+.card.ns{display:grid;gap:10px}
+.ns-sh{display:flex;justify-content:space-between;align-items:baseline;gap:8px;flex-wrap:wrap}
+.ns-sh h3{margin:0}
+.ns-sh small{font-size:.74rem;color:var(--muted)}
+.ns-src{font-size:.74rem;color:var(--muted)}
+.ns-lead{border:1px solid var(--line);border-left:4px solid var(--muted);border-radius:14px;padding:12px 14px;display:grid;gap:8px;min-width:0}
+.ns-lead.micro{border-left-color:var(--ns-micro)}.ns-lead.foreign{border-left-color:var(--ns-for)}.ns-lead.allergen{border-left-color:var(--ns-all)}.ns-lead.chem{border-left-color:var(--ns-chem)}.ns-lead.label{border-left-color:var(--ns-lab)}
+.ns-lead h4{margin:0;font-size:1.08rem;line-height:1.45}
+.ns-lead h4 a,.ns-lead h4 b,.ns-rd>a,.ns-rd>b{color:var(--ink);font-weight:800;text-decoration:underline;text-decoration-color:var(--line);text-underline-offset:3px;overflow-wrap:anywhere}
+.ns-hap{margin:0;font-size:.92rem}
+.ns-lead dl,.ns-ob dl{margin:0;display:grid;gap:2px}
+.ns-lead dt,.ns-ob dt{font-size:.76rem;color:var(--muted);font-weight:700}
+.ns-lead dd,.ns-ob dd{margin:0 0 4px;font-size:.9rem}
+.ns-more summary{cursor:pointer;font-size:.82rem;font-weight:700;color:var(--muted);list-style:none}
+.ns-more summary::-webkit-details-marker,.ns-old summary::-webkit-details-marker{display:none}
+.ns-more summary::after{content:" ▾"}.ns-more[open] summary::after{content:" ▴"}
+.ns-more[open] summary{margin-bottom:6px}
+.ns-old{border:1px solid var(--line);border-radius:12px}
+.ns-old summary{list-style:none;cursor:pointer;padding:9px 12px;display:grid;gap:4px}
+.ns-ln{display:flex;gap:8px;align-items:baseline;min-width:0}
+.ns-ln span{font-size:.74rem;color:var(--muted);white-space:nowrap}
+.ns-ln b{font-size:.9rem;line-height:1.5;overflow-wrap:anywhere}
+.ns-ob{padding:0 12px 12px;display:grid;gap:6px}
+.ns-orig{font-size:.82rem;font-weight:700}
+.ns-rd{border:1px solid var(--line);border-radius:12px;padding:10px 12px;display:grid;gap:5px;min-width:0}
+.ns-rd p{margin:0;font-size:.9rem}
+.card.ns .rq{background:var(--accent-soft);border-radius:10px;padding:8px 10px;font-size:.88rem}
+.ns-old summary:focus-visible,.ns-more summary:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+
+/* 封面：報紙風，有沒看過的新文章才出現 */
+html.ns-lock,html.ns-lock body{overflow:hidden}
+#ns-cover{position:fixed;inset:0;z-index:300;background:var(--ns-paper);color:var(--ink);overflow-y:auto;transition:opacity .25s,transform .25s;
+  padding:calc(14px + env(safe-area-inset-top,0px)) max(18px,env(safe-area-inset-right,0px)) calc(18px + env(safe-area-inset-bottom,0px)) max(18px,env(safe-area-inset-left,0px))}
+#ns-cover.out{opacity:0;transform:translateY(-12px)}
+.ns-pp{max-width:520px;min-height:100%;margin:0 auto;display:flex;flex-direction:column;gap:12px;position:relative}
+.ns-skip{position:absolute;top:-4px;right:-6px;border:0;background:transparent;color:var(--muted);font:500 .82rem var(--f-body);cursor:pointer;padding:6px}
+.ns-mast{border-bottom:3px double var(--ns-rule);padding:14px 0 6px;display:grid;gap:2px;text-align:center}
+.ns-nm{font:900 1.6rem/1.2 "Noto Serif TC","PingFang TC",serif;letter-spacing:.12em}
+.ns-dt{font-size:.75rem;color:var(--muted);letter-spacing:.06em}
+.ns-kick{font-size:.72rem;font-weight:700;letter-spacing:.1em;color:var(--muted);display:flex;justify-content:space-between;gap:8px;border-bottom:1px solid var(--line);padding-bottom:4px}
+.ns-hl,.ns-sec{display:grid;gap:8px;border:0;background:none;text-align:left;font:inherit;color:inherit;padding:0;cursor:pointer}
+.ns-hl h2{margin:0;font:900 1.3rem/1.45 "Noto Serif TC","PingFang TC",serif;text-wrap:balance}
+.ns-hl p{margin:0;font-size:.95rem;line-height:1.65;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.ns-go2{font-size:.82rem;font-weight:700;color:var(--accent)}
+.ns-sec{border-top:1px solid var(--line);padding-top:8px;gap:4px}
+.ns-sec .ns-kick{border:0;padding:0}
+.ns-sec b{font:700 1rem/1.5 "Noto Serif TC","PingFang TC",serif}
+.ns-start{margin-top:auto;border:0;border-radius:14px;background:var(--accent);color:var(--on-accent,#fff);font:700 1rem var(--f-body);padding:14px;cursor:pointer}
+.ns-sub{font-size:.75rem;color:var(--muted);text-align:center;margin:-4px 0 0}
+.ns-hl:focus-visible,.ns-sec:focus-visible,.ns-start:focus-visible,.ns-skip:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+@media (prefers-reduced-motion: reduce){#ns-cover{transition:none}}
+
 /* ===== 本週工地（小島）：色票跟著學堂的深淺色 ===== */
 :root{--is-prod:#3B5BDB;--is-qa:#1E8A5A;--is-line:#D2602A;--is-sky-a:#CBE8F3;--is-sky-b:#9FD0E4;
   --is-grass:#B3DA90;--is-grass-hi:#C3E3A3;--is-soil:#D2B489;--is-soil-dk:#A88658;--is-soil-ink:#5A472F;--is-rock:#A2876A;--is-road:#E6D9BA;
@@ -670,6 +740,84 @@ document.addEventListener("click",e=>{ const b=e.target.closest&&e.target.closes
   const box=b.closest(".kx-bar").parentElement, ds=[...box.querySelectorAll("details.kx")], open=!ds.every(d=>d.open);
   ds.forEach(d=>d.open=open); b.textContent=open?"全部收合":"全部展開"; });
 
+/* ===== 時事：新知封面＋食安收納＋危害標籤（基礎班、進階班共用；2026-11-03）=====
+   ・食安事件最多顯示 3 則：最新一則頭條卡（原因與做法可展開），另外兩則收成一行。
+   ・標籤：危害類型（有顏色，HACCP 分類＋標示錯誤）＋相關產品（灰色）。資料有 haz／prod／country 欄位就用，
+     沒有就依標題與「發生什麼」的關鍵字判斷。
+   ・新知封面：只在「最新食安或最新推薦閱讀」有沒看過的才出現；看過記在 {prefix}newsSeen。
+     出現封面的那次打開，不跳工地首頁（工地狀態不標記看過，下次再出現）。 */
+const NS_HAZ=[["微生物","micro",/李斯特|沙門|大腸|桿菌|球菌|黴|諾羅|肉毒|病毒|細菌|菌/],
+  ["過敏原","allergen",/過敏|堅果|花生|麩質|未標示.{0,4}(乳|蛋|大豆|芝麻)/],
+  ["異物","foreign",/金屬|玻璃|塑膠|異物|碎片|石頭|骨頭/],
+  ["化學","chem",/農藥|殘留|添加物|清潔劑|重金屬|化學|毒素|塑化劑/],
+  ["標示錯誤","label",/標示|標籤|效期|日期錯/]];
+const NS_PROD=[["冰品",/冰淇淋|冰品|雪糕|義式冰|霜淇淋|冰棒/],["乳品",/優格|優酪|乳品|牛奶|鮮乳|起司|乳酪|布丁|奶油/],["果醬",/果醬|果泥|蜜餞|水果/]];
+const NS_HCLS={"微生物":"micro","異物":"foreign","過敏原":"allergen","化學":"chem","標示錯誤":"label"};
+function nsHaz(e){ if(e.haz&&NS_HCLS[e.haz]) return [e.haz,NS_HCLS[e.haz]]; const t=(e.title||"")+(e.happened||"");
+  for(const [n,c,re] of NS_HAZ) if(re.test(t)) return [n,c]; return null; }
+function nsProd(e){ if(e.prod) return e.prod; const t=(e.title||"")+(e.happened||""); for(const [n,re] of NS_PROD) if(re.test(t)) return n; return "其他食品"; }
+function nsTags(e){ const h=nsHaz(e); return `<span class="ns-tags">${h?`<span class="ns-tag ${h[1]}">${h[0]}</span>`:""}<span class="ns-tag prod">${esc(nsProd(e))}</span></span>`; }
+function nsTitle(e){ const t=e.title||""; return (e.country&&!t.includes(e.country)?e.country+"｜":"")+t; }
+function nsSort(a){ return (a||[]).slice().sort((x,y)=>String(y.date||"").localeCompare(String(x.date||""))); }
+function nsMD(d){ const m=String(d||"").match(/^\d{4}-(\d{2})-(\d{2})/); return m?`${+m[1]}/${+m[2]}`:esc(d||""); }
+function nsLink(e,txt){ return e.url?`<a href="${esc(e.url)}" target="_blank" rel="noopener">${esc(txt)}</a>`:`<b>${esc(txt)}</b>`; }
+function nsDL(e,keys){ return `<dl>${keys.map(([k,n])=>e[k]?`<dt>${n}</dt><dd>${esc(e[k])}</dd>`:"").join("")}</dl>`; }
+/* 食安事件區塊（最多 3 則） */
+function nsFsSection(list){
+  const fs=nsSort(list).slice(0,3);
+  const head=`<div class="ns-sh"><h3>食安事件</h3><small>每週二更新 · 最近 ${fs.length||3} 則</small></div>`;
+  if(!fs.length) return `<section class="card ns">${head}<p class="small">每週二更新一則可以查證的真實食安事件。</p></section>`;
+  const e=fs[0], h=nsHaz(e);
+  const lead=`<article class="ns-lead ${h?h[1]:""}"><span class="ns-src">${esc(e.date||"")} · ${esc(e.source||"")}</span>${nsTags(e)}<h4>${nsLink(e,nsTitle(e))}</h4>${e.happened?`<p class="ns-hap">${esc(e.happened)}</p>`:""}
+    <details class="ns-more"><summary>展開原因與做法</summary>${nsDL(e,[["cause","根本原因"],["req","對應要求"],["guard","在我們廠怎麼擋"]])}</details>${e.q?`<div class="rq"><b>討論：</b>${esc(e.q)}</div>`:""}</article>`;
+  const old=fs.slice(1).map(o=>`<details class="ns-old"><summary><span class="ns-ln"><span>${nsMD(o.date)}</span><b>${esc(nsTitle(o))}</b></span>${nsTags(o)}</summary><div class="ns-ob">${nsDL(o,[["happened","發生什麼"],["cause","根本原因"],["req","對應要求"],["guard","在我們廠怎麼擋"]])}${o.q?`<div class="rq"><b>討論：</b>${esc(o.q)}</div>`:""}${o.url?`<a class="ns-orig" href="${esc(o.url)}" target="_blank" rel="noopener">看原文 ›</a>`:""}</div></details>`).join("");
+  return `<section class="card ns">${head}${lead}${old}</section>`;
+}
+/* 推薦閱讀區塊 */
+function nsRdSection(list){
+  const rd=nsSort(list);
+  return `<section class="card ns"><div class="ns-sh"><h3>推薦閱讀</h3><small>每週一、三、五更新</small></div>${rd.length?rd.map(r=>`<article class="ns-rd"><span class="ns-src">${esc(r.date||"")} · ${esc(r.source||"")}</span>${nsLink(r,r.title||"")}${r.sum?`<p>${esc(r.sum)}</p>`:""}${r.q?`<div class="rq"><b>討論：</b>${esc(r.q)}</div>`:""}</article>`).join(""):`<p class="small">目前沒有資料。</p>`}</section>`;
+}
+/* 哪一區比較新就放上面 */
+function nsNewsHTML(fs,rd){ const nw=a=>(a||[]).reduce((m,x)=>String(x.date||"")>m?String(x.date):m,"");
+  return nw(rd)>nw(fs) ? nsRdSection(rd)+nsFsSection(fs) : nsFsSection(fs)+nsRdSection(rd); }
+
+/* ---------- 新知封面 ---------- */
+const NS_ID=e=>e?String(e.date||"")+"|"+String(e.title||""):"";
+let nsActed=false;
+document.addEventListener("pointerdown",()=>{ nsActed=true; },{capture:true,once:true});
+function nsWeekday(d){ const t=new Date(String(d)+"T00:00:00"); return isNaN(t)?"":"日一二三四五六"[t.getDay()]; }
+/* o: {fsUrl, rdUrl, prefix, eligible():bool, onData(fs,rd), after():工地首頁, openNews():跳到時事分頁} */
+function nsBoot(o){
+  const ls={get(k,d){try{const v=localStorage.getItem(o.prefix+k);return v?JSON.parse(v):d}catch(e){return d}},set(k,v){try{localStorage.setItem(o.prefix+k,JSON.stringify(v))}catch(e){}}};
+  const get=u=>fetch(u,{cache:"no-store"}).then(r=>r.ok?r.json():null).then(j=>Array.isArray(j)?j:(j&&j.items)||null).catch(()=>null);
+  let done=false; const fallback=setTimeout(()=>{ if(!done){ done=true; o.after(); } },2500);
+  Promise.all([get(o.fsUrl),get(o.rdUrl)]).then(([fs,rd])=>{
+    if(fs||rd) o.onData(fs||[],rd||[]);
+    if(done) return; done=true; clearTimeout(fallback);
+    const f=nsSort(fs||[])[0], r=nsSort(rd||[])[0], seen=ls.get("newsSeen",[]);
+    const fresh=[f,r].filter(x=>x&&!seen.includes(NS_ID(x)));
+    if(!fresh.length||nsActed||!o.eligible()){ o.after(); return; }
+    nsShowCover(f,r,()=>{ const s=ls.get("newsSeen",[]); [f,r].forEach(x=>{ if(x&&!s.includes(NS_ID(x))) s.push(NS_ID(x)); }); ls.set("newsSeen",s.slice(-40)); },o);
+  });
+}
+function nsShowCover(f,r,markSeen,o){
+  const host=document.createElement("div"); host.id="ns-cover"; host.setAttribute("role","dialog"); host.setAttribute("aria-modal","true"); host.setAttribute("aria-label","本週新知");
+  const d=(f&&f.date)>(r&&r.date)?f.date:(r?r.date:f.date), m=String(d||"").match(/^(\d{4})-(\d{2})-(\d{2})/);
+  const h=f?nsHaz(f):null;
+  host.innerHTML=`<div class="ns-pp"><button type="button" class="ns-skip" data-ns="close">略過 ✕</button>
+    <div class="ns-mast"><span class="ns-nm">本週新知</span><span class="ns-dt">${m?`${m[1]} 年 ${+m[2]} 月 ${+m[3]} 日（${nsWeekday(d)}）`:""} · 雪坊幹部學堂</span></div>
+    ${f?`<div class="ns-kick"><span>食安頭條</span><span>${esc(f.source||"")}</span></div>
+    <button type="button" class="ns-hl" data-ns="news">${nsTags(f)}<h2>${esc(nsTitle(f))}</h2>${f.happened?`<p>${esc(f.happened)}</p>`:""}<span class="ns-go2">看完整分析 ›</span></button>`:""}
+    ${r?`<button type="button" class="ns-sec" data-ns="news"><span class="ns-kick"><span>推薦閱讀</span><span>${esc(r.source||"")}</span></span><b>${esc(r.title||"")}</b></button>`:""}
+    <button type="button" class="ns-start" data-ns="close">開始今天的關卡</button><p class="ns-sub">看過的文章不會再出現在封面</p></div>`;
+  document.body.appendChild(host); document.documentElement.classList.add("ns-lock");
+  const close=go=>{ markSeen(); host.classList.add("out"); document.documentElement.classList.remove("ns-lock"); setTimeout(()=>host.remove(),260); if(go) o.openNews(); };
+  host.addEventListener("click",e=>{ const b=e.target.closest("[data-ns]"); if(b) close(b.dataset.ns==="news"); });
+  document.addEventListener("keydown",function k(e){ if(e.key==="Escape"&&document.body.contains(host)){ close(false); document.removeEventListener("keydown",k); } });
+  const s=host.querySelector(".ns-start"); if(s) s.focus();
+}
+
 /* 雪坊幹部學堂 進階班：完整版引擎。資料由 build_adv.py 注入 DATA。 */
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 const store={get(k,d){try{const v=localStorage.getItem("xfadv-"+k);return v?JSON.parse(v):d}catch(e){return d}},set(k,v){try{localStorage.setItem("xfadv-"+k,JSON.stringify(v))}catch(e){}}};
@@ -924,11 +1072,7 @@ function loadNews(){ const box=document.getElementById("newsbox"); if(!box) retu
   const get=u=>fetch(u,{cache:"no-store"}).then(r=>r.ok?r.json():[]).then(j=>Array.isArray(j)?j:(j.items||[])).catch(()=>null);
   Promise.all([get(DATA.newsUrl),get(DATA.readingsUrl)]).then(([fs,rd])=>{
     if(fs===null&&rd===null){ box.innerHTML=`<section class="card"><p class="small">讀不到時事資料。正式網站上會顯示和基礎班相同的食安事件與推薦閱讀。</p></section>`; return; }
-    fs=(fs||[]).slice().sort((a,b)=>String(b.date).localeCompare(String(a.date))).slice(0,6); rd=rd||[];
-    const fsH=`<section class="card"><h2>食安事件</h2><p class="small">每週二更新一則可以查證的真實食安事件。看完想一想：如果發生在我們廠，你的職務第一步做什麼？</p>${fs.length?fs.map(e=>`<article class="reading">${kxNewsTop("shield",e.date,e.source)}${e.url?`<a href="${esc(e.url)}" target="_blank" rel="noopener">${esc(e.title||"")}</a>`:`<b>${esc(e.title||"")}</b>`}<dl>${[["發生什麼",e.happened],["根本原因",e.cause],["對應要求",e.req],["在我們廠怎麼擋",e.guard]].filter(x=>x[1]).map(x=>`<dt>${x[0]}</dt><dd>${esc(x[1])}</dd>`).join("")}</dl>${e.q?`<div class="rq"><b>討論：</b>${esc(e.q)}</div>`:""}</article>`).join(""):`<p class="small">目前沒有資料。</p>`}</section>`;
-    const rdH=`<section class="card"><h2>推薦閱讀</h2><p class="small">每週一、三、五更新。摘要是重點整理，完整內容請點標題閱讀原文。</p>${rd.length?rd.map(r=>`<article class="reading">${kxNewsTop("list",r.date,r.source)}<a href="${esc(r.url||"")}" target="_blank" rel="noopener">${esc(r.title||"")}</a>${r.sum?`<p>${esc(r.sum)}</p>`:""}${r.q?`<div class="rq"><b>討論：</b>${esc(r.q)}</div>`:""}</article>`).join(""):`<p class="small">目前沒有資料。</p>`}</section>`;
-    const newest=a=>a.reduce((m,x)=>String(x.date||"")>m?String(x.date):m,"");
-    box.innerHTML = newest(rd)>newest(fs) ? rdH+fsH : fsH+rdH;
+    box.innerHTML = nsNewsHTML(fs||[], rd||[]);
   }); }
 
 /* ================= 主程式 ================= */
@@ -1856,7 +2000,7 @@ document.addEventListener("keydown",e=>{ if(e.key==="Escape"){ const ml=document
 window.__advIsleTest={mileOpen,mileRowSVG,siteSVG,areaSVG,evState,inspState,audState,openIsle,curWeek};
 
 })();
-render();isleBoot();
+render();nsBoot({fsUrl:DATA.newsUrl,rdUrl:DATA.readingsUrl,prefix:"xfadv-",eligible:()=>!!st.role,onData:()=>{},after:()=>isleBoot(),openNews:()=>{ st.tab="know"; st.ktab="news"; render(); window.scrollTo(0,0); }});
 
 </script>
 
