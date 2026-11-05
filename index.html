@@ -1549,6 +1549,7 @@ function loadNews(){ const box=document.getElementById("newsbox"); if(!box) retu
   Promise.all([get(DATA.newsUrl),get(DATA.readingsUrl)]).then(([fs,rd])=>{
     if(fs===null&&rd===null){ box.innerHTML=`<section class="card"><p class="small">讀不到時事資料。正式網站上會顯示和基礎班相同的食安事件與推薦閱讀。</p></section>`; return; }
     window.__advNews={fs:nsSort(fs||[]).slice(0,3), rd:nsSort(rd||[]).slice(0,2)}; box.innerHTML = mcNewsHTML();
+    if(st.openNews){ st.openNews=false; const N=window.__advNews, t=N.fs.length?"f":N.rd.length?"r":""; if(t) mcOpen(mcNewsSheet(t,0)); }
   }); }
 
 /* ================= 主程式 ================= */
@@ -1625,7 +1626,7 @@ document.addEventListener("click",e=>{
   if(act==="homego"){ const c=hmCur(); if(!c) return; const keepS=c.S||0, res=c.res; goL(c.W,c.L); if(res){ st.S=keepS; st.resumed=true; render(); } return; }
   if(act==="hmprog"){ st.tab="prog"; render(); window.scrollTo(0,0); return; }
   if(act==="gomtip"){ st.tab="prog"; st.ptab="medal"; st.mtipW=+t.dataset.w; render(); window.scrollTo(0,0); return; }
-  if(act==="gonews"){ if(typeof nsMarkSeen==="function") nsMarkSeen(); st.tab="know"; st.ktab="news"; render(); window.scrollTo(0,0); return; }
+  if(act==="gonews"){ if(typeof nsMarkSeen==="function") nsMarkSeen(); st.tab="know"; st.ktab="news"; st.openNews=true; render(); window.scrollTo(0,0); return; }  /* 資料讀到後直接打開那則全文抽屜（loadNews） */
   if(act==="onbnext"){ st.onb++; render(); window.scrollTo(0,0); }
   else if(act==="onbback"){ st.onb=Math.max(0,st.onb-1); render(); }
   else if(act==="next"){ st.slideDir=st.slideDir||"l"; st.S++; st.resumed=false; saveLast(); render(); window.scrollTo(0,0); }
