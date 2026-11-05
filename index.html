@@ -12,7 +12,7 @@
 <meta name="theme-color" content="#F1F8F4">
 <title>雪坊幹部學堂 進階班</title>
 <meta name="claude:viewport-fit-sides" content="cover">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=LXGW+WenKai+TC:wght@400;700&family=Noto+Sans+TC:wght@400;500;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=LXGW+WenKai+TC:wght@400;700&family=Noto+Sans+TC:wght@400;500;700&family=Noto+Serif+TC:wght@900&display=swap">
 <style>
 
 /* Layout: same shell as 雪坊幹部學堂 — header, hero with 5 steps, one slide card with prev/next, bottom tab bar. 衛管 green. */
@@ -342,6 +342,338 @@ dl.det dd{margin:0 0 4px}
 .mtip ul{list-style:none;margin:0;padding:0;display:grid;gap:6px}
 .mtip li{display:flex;align-items:center;justify-content:space-between;gap:8px;font-size:.86rem;line-height:1.4}
 .mtip li .btn{flex:none;min-height:40px;padding:6px 14px}
+/* ---------- 今日首頁（2026-11 改版，沿用基礎班 .hm-* 結構） ---------- */
+/* ===== 今日關卡首頁（2026-11-05 改版）=====
+   結構固定、顏色跟著職務：主色＝--accent、淡色底＝--accent-soft、深色橫幅＝--hm-banner、點綴＝--hm-hi（檸檬黃）。
+   人物圖固定每職務一位（img/qa|prod|line.webp），去背 webp。 */
+:root{--hm-banner:#1C2A63;--hm-hi:#F2C94C;--hm-hi-ink:#2A2410;--hm-shadow:0 2px 10px rgba(23,33,43,.07)}
+body[data-role="qa"]{--hm-banner:#123F2B}
+body[data-role="line"]{--hm-banner:#4E2412}
+:root[data-theme="dark"]{--hm-shadow:none}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){--hm-shadow:none} }
+.hm{display:grid;gap:14px;padding-top:4px}
+.hm-s{font-size:.78rem;color:var(--muted)}
+.hm-s.c{text-align:center;display:block}
+.hm-k{font-size:.75rem;font-weight:700;color:var(--accent-deep)}
+.hm-row{display:flex;justify-content:space-between;align-items:baseline;gap:10px}
+.hm-lnk{border:0;background:transparent;color:var(--muted);font:500 .8rem var(--f-body);padding:6px 2px;cursor:pointer}
+.hm-lnk.c{display:block;margin:0 auto;color:var(--accent-deep);font-weight:700}
+.hm-id{display:flex;align-items:center;gap:10px;width:100%;border:0;cursor:pointer;background:var(--surface);color:var(--ink);border-radius:18px;padding:12px 14px;box-shadow:var(--hm-shadow);font:inherit;text-align:left}
+.hm-tag{flex:none;font-size:.72rem;font-weight:700;color:var(--accent-deep);background:var(--accent-soft);border-radius:99px;padding:2px 9px}
+.hm-wk{flex:none;font-weight:700;font-size:.9rem}
+.hm-bar{flex:1;height:8px;border-radius:99px;background:var(--line);overflow:hidden}
+.hm-bar i{display:block;height:100%;background:var(--accent);border-radius:99px}
+.hm-n{flex:none;font-size:.78rem;color:var(--muted)}
+.hm-news{display:grid;grid-template-columns:minmax(0,1fr) 104px;width:100%;border:0;cursor:pointer;text-align:left;font:inherit;color:#fff;background:var(--hm-banner);border-radius:22px;overflow:hidden;box-shadow:var(--hm-shadow);min-height:158px;padding:0}
+.hm-nt{display:flex;flex-direction:column;gap:7px;padding:16px 4px 16px 16px;min-width:0}
+.hm-nk{font-size:.75rem;color:rgba(255,255,255,.85);display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.hm-nk em{font-style:normal;font-weight:900;font-size:.72rem;color:var(--hm-hi-ink);background:var(--hm-hi);border-radius:99px;padding:2px 9px}
+.hm-nt b{font-size:1.08rem;line-height:1.45}
+.hm-ntag{display:flex;gap:6px;flex-wrap:wrap}
+.hm-ntag i{font-style:normal;font-size:.7rem;font-weight:700;color:#22201C;background:#ECE8E0;border-radius:99px;padding:1px 8px}
+.hm-ntag i.micro{background:#F4B4AC}.hm-ntag i.foreign{background:#F2B35B}.hm-ntag i.allergen{background:#F5C77E}.hm-ntag i.chem{background:#C9B8F0}.hm-ntag i.label{background:#A9D3F2}
+.hm-nm{font-size:.8rem;font-weight:700;color:var(--hm-hi)}
+.hm-news img{width:104px;height:100%;min-height:158px;object-fit:cover;object-position:4% 100%;align-self:end}
+.hm-take{display:grid;gap:6px;background:var(--accent-soft);border-radius:20px;padding:14px 16px;border-left:6px solid var(--accent)}
+.hm-take b{font-size:1.02rem;line-height:1.55}
+.hm-hero{background:var(--surface);border-radius:24px;overflow:hidden;box-shadow:var(--hm-shadow)}
+.hm-pic{position:relative;height:196px;background:var(--accent-soft);overflow:hidden}
+.hm-pic>svg{position:absolute;inset:0;width:100%;height:100%}
+.hm-chip{position:absolute;left:12px;top:12px;font-size:.72rem;font-weight:700;color:var(--accent-deep);background:var(--surface);border-radius:99px;padding:3px 10px}
+.hm-ch{position:absolute;right:-6px;bottom:-4px;width:158px;height:164px;object-fit:contain;object-position:bottom;filter:drop-shadow(0 4px 6px rgba(0,0,0,.18));pointer-events:none}
+.hm-ch.prod{width:174px;height:180px}
+.hm-body{padding:14px 16px 16px;display:grid;gap:12px}
+.hm-body h2{margin:0;font-size:1.25rem;font-weight:900}
+.hm-stg{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:6px}
+.hm-stg span{display:grid;gap:4px;justify-items:center;font-size:.68rem;font-weight:700;color:var(--muted)}
+.hm-stg i{display:block;width:100%;height:8px;border-radius:99px;background:var(--line);box-sizing:border-box}
+.hm-stg .ok{color:var(--ink)}.hm-stg .ok i{background:var(--accent)}
+.hm-stg .now{color:var(--ink)}.hm-stg .now i{background:var(--hm-hi)}
+body[data-role="line"] .hm-stg .now i{background:var(--accent-soft);border:1.5px dashed var(--accent-deep)}
+.hm-cta{width:100%;border:0;cursor:pointer;border-radius:16px;padding:15px 10px;font:900 1.02rem var(--f-body);background:var(--accent);color:var(--on-accent)}
+.hm-cta.done{background:var(--accent-soft);color:var(--accent-deep)}
+.hm-card{background:var(--surface);border-radius:20px;padding:14px 16px;box-shadow:var(--hm-shadow);display:grid;gap:10px}
+.hm-foil{width:100%;height:62px;border:0;border-radius:14px;cursor:pointer;font:700 .9rem var(--f-body);color:var(--ink);background:repeating-linear-gradient(135deg,#CFCAC1 0 8px,#C3BDB3 8px 16px)}
+:root[data-theme="dark"] .hm-foil{background:repeating-linear-gradient(135deg,#4A4D57 0 8px,#40434C 8px 16px)}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]) .hm-foil{background:repeating-linear-gradient(135deg,#4A4D57 0 8px,#40434C 8px 16px)} }
+.hm-prize{display:grid;gap:4px;background:var(--accent-soft);border-radius:14px;padding:12px 14px}
+.hm-prize b{font-size:.98rem;line-height:1.5}.hm-prize span:last-child{font-size:.82rem;color:var(--muted);line-height:1.5}
+.hm-sec{display:grid;gap:8px}
+.hm-sec h3{margin:0 2px;font-size:1rem}
+.hm-tasks{display:flex;gap:10px;overflow-x:auto;padding:2px 2px 8px;scrollbar-width:none}
+.hm-tasks::-webkit-scrollbar{display:none}
+.hm-task{flex:none;width:168px;border:0;cursor:pointer;text-align:left;font:inherit;color:var(--ink);background:var(--surface);border-radius:20px;overflow:hidden;box-shadow:var(--hm-shadow);padding:0;display:grid}
+.hm-tp{position:relative;height:120px;display:flex;align-items:flex-end;justify-content:center;overflow:hidden}
+.hm-task.ev .hm-tp{background:var(--bad-soft)}.hm-task.in .hm-tp{background:#E6EEF8}
+:root[data-theme="dark"] .hm-task.in .hm-tp{background:#202D40}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]) .hm-task.in .hm-tp{background:#202D40} }
+.hm-tp img{width:140px;height:116px;object-fit:contain;object-position:bottom}
+.hm-tp em{position:absolute;left:10px;top:10px;font-style:normal;font-size:.7rem;font-weight:700;color:#fff;border-radius:99px;padding:1px 8px;background:#C8473A}
+.hm-task.in .hm-tp em{background:#2F68AE}
+.hm-task b{padding:10px 12px 0;font-size:.95rem}
+.hm-task>span:last-child{padding:2px 12px 12px;font-size:.78rem;color:var(--muted)}
+.hm-goal{display:flex;align-items:center;gap:12px;width:100%;border:0;cursor:pointer;text-align:left;font:inherit;color:var(--ink);background:var(--surface);border-radius:20px;padding:10px 14px 10px 10px;box-shadow:var(--hm-shadow)}
+.hm-gm{flex:none;width:60px;height:60px;border-radius:99px;background:var(--accent-soft);display:grid;place-items:center}
+.hm-gm svg{width:44px;height:48px}
+.hm-gt{flex:1;min-width:0;display:grid;gap:2px}.hm-gt b{font-size:1rem}
+.hm-go{flex:none;font-size:.8rem;font-weight:700;color:var(--accent-deep);background:var(--accent-soft);border-radius:99px;padding:7px 12px}
+.hm-back{display:block;border:0;background:transparent;color:var(--accent-deep);font:700 .85rem var(--f-body);padding:2px 0 8px;cursor:pointer}
+@media (max-height:700px){ .hm-pic{height:160px} .hm-news,.hm-news img{min-height:140px} .hm-ch{width:136px;height:142px} .hm-ch.prod{width:150px;height:156px} }
+.hm-ch{opacity:0;transition:opacity .25s ease}.hm-ch.in{opacity:1}
+/* 進階班：寶石色＋香檳金、明體標題 */
+:root{--gem:#0F5A43;--gem-2:#0B4433;--champ:#D8BC84;--champ-deep:#8A6A2E;--champ-soft:#F6EEDC}
+body[data-role="prod"]{--gem:#1C3577;--gem-2:#14275A}
+body[data-role="line"]{--gem:#8A3418;--gem-2:#6A2610}
+:root[data-theme="dark"]{--champ-soft:#2E2818;--champ-deep:#E2C891}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){--champ-soft:#2E2818;--champ-deep:#E2C891} }
+.hm.adv{--hm-banner:var(--gem-2)}
+.hm{display:grid;gap:14px}
+.hm.adv .hm-tag{background:var(--champ-soft);color:var(--champ-deep)}
+.hm.adv .hm-bar i,.hm.adv .hm-stg .ok i{background:var(--gem)}
+.hm.adv .hm-stg .now i{background:var(--champ)}
+.hm.adv .hm-hero{border:1px solid var(--champ);box-shadow:0 0 0 3px var(--champ-soft),var(--hm-shadow)}
+.hm.adv .hm-pic{display:block;width:100%;border:0;padding:0;cursor:pointer;background:linear-gradient(180deg,#FBE9C9,#F6EEDC)}
+:root[data-theme="dark"] .hm.adv .hm-pic{background:linear-gradient(180deg,#2C2416,#1E1A12)}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]) .hm.adv .hm-pic{background:linear-gradient(180deg,#2C2416,#1E1A12)} }
+.hm.adv .hm-chip{color:var(--champ-deep);border:1px solid var(--champ)}
+.hm.adv .hm-k{color:var(--champ-deep);letter-spacing:.06em}
+.hm.adv .hm-body h2{font-family:"Noto Serif TC","Songti TC",serif;font-weight:900;font-size:1.3rem;line-height:1.4}
+.hm.adv .hm-cta{background:linear-gradient(135deg,var(--gem),var(--gem-2));color:#fff;box-shadow:inset 0 0 0 1.5px var(--champ)}
+.hm.adv .hm-cta.done{background:var(--champ-soft);color:var(--champ-deep);box-shadow:none}
+.hm.adv .hm-go{background:var(--champ-soft);color:var(--champ-deep)}
+.hm.adv .hm-news{box-shadow:inset 0 0 0 1.5px var(--champ),var(--hm-shadow)}
+.hm.adv .hm-nm{color:var(--champ)}
+.hm.adv .hm-gm{background:var(--champ-soft)}
+.hm-case{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:2px 10px;align-items:center;width:100%;border:0;border-left:5px solid var(--champ);cursor:pointer;text-align:left;font:inherit;color:var(--ink);background:var(--surface);border-radius:18px;padding:12px 14px;box-shadow:var(--hm-shadow)}
+.hm-case .hm-k{grid-column:1}.hm-case b{grid-column:1;font-family:"Noto Serif TC","Songti TC",serif;font-size:1.02rem}.hm-case .hm-go{grid-column:2;grid-row:1/3}
+.hm-pic>svg{pointer-events:none}
+/* 2026-11：人物、食安橫幅人物、工地圖尺寸一律比照基礎班（沿用上方 .hm-* 規則，不另外覆寫） */
+/* 2026-11-05：人的身高＝基礎班的 95%（約 149px），三個職務一樣；各圖留白不同，框各自換算 */
+.hm.adv .hm-ch.qa{width:143px;height:150px}  /* 2026-11-05 衛管改 F-071 衛生管理員 */
+.hm.adv .hm-ch.prod{width:160px;height:160px}
+.hm.adv .hm-ch.line{width:144px;height:160px}
+@media (max-height:700px){ .hm.adv .hm-ch.qa{width:125px;height:129px} .hm.adv .hm-ch.prod{width:138px;height:138px} .hm.adv .hm-ch.line{width:124px;height:138px} }
+.hm.adv .hm-news img{transform:scale(.97);transform-origin:50% 100%}  /* 2026-11-05：食安人物縮小 3% */
+
+/* ---------- 2026-11-05 我的進度、共同知識比照基礎班（複製自 v5_extra.css 的 .mc-*） ---------- */
+/* ---------- 我的進度第三版：麥當勞式大卡 ---------- */
+.mc-chips{display:flex;gap:8px;overflow-x:auto;scrollbar-width:none;padding:2px 2px 4px}
+.mc-chips::-webkit-scrollbar{display:none}
+.mc-chips button{flex:none;border:1.5px solid var(--line);background:var(--surface);color:var(--ink);border-radius:99px;padding:9px 18px;font:700 .95rem var(--f-body);cursor:pointer;transition:transform .12s,background .2s}
+.mc-chips button[aria-selected="true"]{background:var(--ink);border-color:var(--ink);color:var(--surface)}
+.mc-chips button:active{transform:scale(.95)}
+.mc-card{display:block;width:100%;border:0;padding:0;text-align:left;font:inherit;color:var(--ink);background:var(--surface);border-radius:22px;overflow:hidden;box-shadow:0 4px 16px rgba(23,33,43,.10);cursor:pointer;transition:transform .14s ease}
+.mc-card:active{transform:scale(.98)}
+:root[data-theme="dark"] .mc-card{box-shadow:none;border:1px solid var(--line)}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]) .mc-card{box-shadow:none;border:1px solid var(--line)} }
+.mc-img{position:relative;display:block;height:178px;overflow:hidden;color:#fff;background:radial-gradient(120% 90% at 85% 40%,color-mix(in srgb,var(--accent) 70%,#fff) 0,var(--accent) 45%,var(--accent-deep) 100%);padding:18px 18px 0}
+.mc-img.sm{height:auto;padding:22px 18px}
+.mc-img::after{content:"";position:absolute;left:-10%;right:-10%;bottom:-38px;height:70px;background:var(--surface);border-radius:50% 50% 0 0/100% 100% 0 0;opacity:.18}
+.mc-rib{display:inline-block;background:var(--hm-hi);color:var(--hm-hi-ink);font-weight:900;font-size:.78rem;border-radius:6px 14px 14px 6px;padding:3px 12px 3px 10px;transform:rotate(-3deg)}
+.mc-big{display:block;margin-top:6px;font-weight:900;font-size:1.25rem;line-height:1.1;letter-spacing:.02em}
+.mc-big b{font-size:3rem;margin:0 4px;line-height:1}
+.mc-sub2{display:block;margin-top:4px;font-size:.82rem;font-weight:700;opacity:.9;max-width:60%}
+.mc-art{position:absolute;right:14px;top:16px;width:118px;height:130px;filter:drop-shadow(0 8px 12px rgba(0,0,0,.25))}
+.mc-art svg{width:100%;height:100%}
+.mc-pts{display:flex;gap:5px;flex-wrap:wrap}
+.mc-pts i{width:14px;height:14px;border-radius:99px;border:2px solid currentColor;opacity:.55;box-sizing:border-box}
+.mc-pts i.on{background:var(--hm-hi);border-color:var(--hm-hi);opacity:1;animation:mcPop .35s calc(var(--i)*40ms) both}
+.mc-pts.lt{position:absolute;left:18px;bottom:16px;max-width:58%}
+@keyframes mcPop{from{transform:scale(.2)}70%{transform:scale(1.25)}to{transform:none}}
+.mc-txt{display:grid;gap:2px;padding:14px 18px 16px}
+.mc-txt b{font-size:1.12rem;font-weight:900}
+.mc-txt span{font-size:.85rem;color:var(--muted)}
+.mc-stg{position:absolute;left:18px;right:18px;bottom:16px;display:grid;grid-template-columns:repeat(5,1fr);gap:6px}
+.mc-stg span{display:grid;justify-items:center;gap:3px;font-size:.7rem;font-weight:700}
+.mc-stg i{font-style:normal;width:34px;height:34px;border-radius:99px;display:grid;place-items:center;border:2px solid rgba(255,255,255,.7);font-size:.85rem}
+.mc-stg .ok i{background:#fff;color:var(--accent-deep);border-color:#fff}
+.mc-stg .now i{background:var(--hm-hi);color:var(--hm-hi-ink);border-color:var(--hm-hi);animation:mcPulse 1.6s ease-in-out infinite}
+@keyframes mcPulse{50%{box-shadow:0 0 0 7px rgba(242,201,76,.3)}}
+.mc-sec{display:grid;gap:8px}
+.mc-h{display:flex;justify-content:space-between;align-items:baseline;gap:10px;margin:4px 2px 0}
+.mc-h h3{margin:0;font-size:1.15rem;font-weight:900}
+.mc-h span{font-size:.75rem;color:var(--muted)}
+.mc-car{display:flex;gap:10px;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;padding:4px 2px 10px;margin:0 -2px}
+.mc-car::-webkit-scrollbar{display:none}
+.mc-mini{flex:0 0 42%;scroll-snap-align:start;display:grid;gap:3px;justify-items:start;text-align:left;border:0;cursor:pointer;font:inherit;color:var(--ink);background:var(--surface);border-radius:18px;padding:0 0 12px;overflow:hidden;box-shadow:0 3px 12px rgba(23,33,43,.09);transition:transform .14s}
+.mc-mini:active{transform:scale(.96)}
+:root[data-theme="dark"] .mc-mini{box-shadow:none;border:1px solid var(--line)}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]) .mc-mini{box-shadow:none;border:1px solid var(--line)} }
+.mc-mimg{display:grid;place-items:center;width:100%;height:96px;background:var(--accent-soft)}
+.mc-mimg svg{width:64px;height:70px}
+.mc-mini.gold .mc-mimg{background:linear-gradient(135deg,#FFF2C2,#F4D77A)}
+.mc-mini.silver .mc-mimg{background:linear-gradient(135deg,#F1F3F5,#CBD2D9)}
+.mc-mini.bronze .mc-mimg{background:linear-gradient(135deg,#F8E1CC,#DDA97A)}
+.mc-mini>b{padding:0 12px;font-size:.86rem;line-height:1.35;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.mc-mini>span:last-child{padding:0 12px;font-size:.75rem;color:var(--muted)}
+.mc-ring{width:100%;height:96px;display:grid;place-items:center;background:var(--accent-soft)}
+.mc-ring b{width:62px;height:62px;border-radius:99px;display:grid;place-items:center;font-size:.95rem;background:radial-gradient(closest-side,var(--surface) 76%,transparent 78% 100%),conic-gradient(var(--accent) calc(var(--p)*1%),var(--line) 0)}
+.mc-note{cursor:default}
+.mc-nh{display:flex;align-items:center;gap:10px;padding:14px 16px 0}
+.mc-wk{flex:none;background:var(--accent);color:var(--on-accent);font-weight:900;font-size:.8rem;border-radius:8px;padding:3px 8px}
+.mc-nh b{font-size:.95rem}
+.mc-nb{display:block;padding:10px 16px;font-size:1rem;line-height:1.65;white-space:pre-wrap}
+.mc-nf{display:flex;justify-content:flex-end;padding:0 14px 14px}
+/* 底部抽屜 */
+#mc-sheet{position:fixed;inset:0;z-index:110;pointer-events:none}
+#mc-sheet .mc-bd{position:absolute;inset:0;background:rgba(10,14,20,.45);opacity:0;transition:opacity .25s}
+#mc-sheet .mc-panel{position:absolute;left:0;right:0;bottom:0;max-height:86vh;display:flex;flex-direction:column;background:var(--surface);color:var(--ink);border-radius:24px 24px 0 0;transform:translateY(105%);transition:transform .32s cubic-bezier(.2,.8,.2,1);box-shadow:0 -8px 30px rgba(0,0,0,.2);max-width:560px;margin:0 auto}
+#mc-sheet.on{pointer-events:auto}
+#mc-sheet.on .mc-bd{opacity:1}
+#mc-sheet.on .mc-panel{transform:none}
+.mc-grab{display:grid;place-items:center;padding:10px 0 4px;cursor:grab}.mc-grab i{width:42px;height:5px;border-radius:9px;background:var(--line)}
+.mc-x{position:absolute;right:12px;top:10px;width:34px;height:34px;border-radius:99px;border:0;background:var(--accent-soft);color:var(--ink);font-size:1.3rem;cursor:pointer}
+.mc-body{overflow-y:auto;padding:4px 18px calc(22px + env(safe-area-inset-bottom));display:grid;gap:12px}
+.mc-body h4{margin:6px 0 0;font-size:.95rem}
+.mc-shead{display:flex;gap:14px;align-items:center}
+.mc-shead h3{margin:0;font-size:1.2rem;font-weight:900}
+.mc-smed{position:relative;flex:none;width:86px;height:94px}
+.mc-smed svg{width:100%;height:100%;animation:mcDrop .5s cubic-bezier(.2,1.4,.4,1) both}
+@keyframes mcDrop{from{transform:translateY(-24px) scale(.6);opacity:0}to{transform:none;opacity:1}}
+.mc-stamp{position:absolute;right:-12px;bottom:4px;border:3px solid #C8473A;color:#C8473A;font-weight:900;font-size:.85rem;border-radius:8px;padding:1px 6px;background:var(--surface);transform:rotate(-14deg);animation:mcStamp .45s .35s cubic-bezier(.2,1.6,.4,1) both}
+.mc-stamp.s{border-color:#6B7785;color:#6B7785}
+@keyframes mcStamp{from{transform:rotate(-14deg) scale(2.4);opacity:0}to{transform:rotate(-14deg) scale(1);opacity:1}}
+.mc-tier{display:inline-block;margin-top:4px;font-size:.8rem;border-radius:99px;padding:2px 10px;background:var(--accent-soft);color:var(--accent-deep)}
+.mc-tier.gold{background:#FFF2C2;color:#7A5A00}.mc-tier.silver{background:#E9EDF1;color:#4A5561}.mc-tier.bronze{background:#F8E1CC;color:#7A4520}
+.mc-meter{display:grid;gap:8px;background:var(--accent-soft);border-radius:16px;padding:12px 14px}
+.mc-meter>div{display:grid;grid-template-columns:3em 1fr auto;align-items:center;gap:8px;font-size:.82rem;font-weight:700}
+.mc-meter .mc-pts i{border-color:var(--accent);opacity:.4;width:13px;height:13px}
+.mc-meter .mc-pts i.on{background:var(--accent);border-color:var(--accent);opacity:1}
+.mc-meter em{font-style:normal;color:var(--muted)}
+.mc-miss,.mc-steps{list-style:none;margin:0;padding:0;display:grid;gap:8px}
+.mc-miss li,.mc-steps li{display:flex;align-items:center;gap:10px;justify-content:space-between;background:var(--bg);border-radius:14px;padding:10px 12px;font-size:.88rem}
+.mc-steps li{justify-content:flex-start}
+.mc-steps li i{flex:none;font-style:normal;width:26px;height:26px;border-radius:99px;display:grid;place-items:center;border:2px solid var(--line);font-size:.78rem;font-weight:700}
+.mc-steps li.ok i{background:var(--accent);border-color:var(--accent);color:var(--on-accent)}
+.mc-steps li span{flex:1}
+.mc-go{flex:none;border:0;cursor:pointer;border-radius:99px;padding:7px 14px;font:700 .8rem var(--f-body);background:var(--accent);color:var(--on-accent);transition:transform .12s}
+.mc-go:active{transform:scale(.94)}
+.mc-cta{width:100%;border:0;cursor:pointer;border-radius:16px;padding:14px;font:900 1rem var(--f-body);background:var(--hm-hi);color:var(--hm-hi-ink)}
+@media (prefers-reduced-motion: reduce){ .mc-pts i.on,.mc-smed svg,.mc-stamp,.mc-stg .now i{animation:none} #mc-sheet .mc-panel,#mc-sheet .mc-bd{transition:none} }
+:root[data-theme="dark"] .mc-img{background:radial-gradient(120% 90% at 85% 40%,color-mix(in srgb,var(--hm-banner) 55%,var(--accent) 45%) 0,var(--hm-banner) 75%)}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]) .mc-img{background:radial-gradient(120% 90% at 85% 40%,color-mix(in srgb,var(--hm-banner) 55%,var(--accent) 45%) 0,var(--hm-banner) 75%)} }
+:root[data-theme="dark"] .mc-stg .ok i{color:var(--hm-banner)}
+#mc-sheet:not(.on) .mc-panel{visibility:hidden;transition:transform .32s cubic-bezier(.2,.8,.2,1),visibility 0s .32s}
+/* 加工流程、共同知識：同我的進度的大卡 */
+.mc-chips button[aria-pressed="true"]{background:var(--ink);border-color:var(--ink);color:var(--surface)}
+.mc-new{font-style:normal;font-weight:900;font-size:.68rem;color:var(--hm-hi-ink);background:var(--hm-hi);border-radius:99px;padding:1px 7px;vertical-align:2px}
+.mc-static{cursor:default}.mc-static:active{transform:none}
+.mc-img.nz{background:radial-gradient(120% 90% at 85% 40%,color-mix(in srgb,var(--hz) 70%,#fff) 0,var(--hz) 50%,color-mix(in srgb,var(--hz) 70%,#000) 100%)}
+.mc-img.rd{background:radial-gradient(120% 90% at 85% 40%,#5B6270 0,#33373D 55%,#1F2226 100%)}
+.mc-art.fx,.mc-art.nz{width:112px;height:112px;top:22px;right:18px;border-radius:99px;background:rgba(255,255,255,.95);display:grid;place-items:center;color:var(--accent-deep)}
+.mc-art.fx svg{width:70%;height:70%}
+.mc-art.nz svg{width:58%;height:58%;fill:none;stroke:#33373D;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.mc-img.nz .mc-art.nz svg{stroke:var(--hz)}
+.mc-clamp{display:-webkit-box!important;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;line-height:1.5}
+.mc-area{height:170px;padding:0;background:var(--accent-soft)}
+.mc-area>svg{position:absolute;inset:0;width:100%;height:100%}
+.mc-area .mc-rib{position:absolute;left:16px;top:14px}
+.mc-area::after{display:none}
+.mc-nhd{display:grid;gap:6px;padding-right:34px}.mc-nhd h3{margin:0;font-size:1.15rem;line-height:1.45}
+.mc-dl dl{margin:0;display:grid;gap:4px;background:var(--bg);border-radius:14px;padding:12px 14px}
+.mc-dl dt{font-size:.76rem;color:var(--muted);font-weight:700}.mc-dl dd{margin:0 0 6px;line-height:1.6}
+.mc-q{background:var(--accent-soft);border-radius:14px;padding:10px 14px;display:grid;gap:2px}.mc-q b{font-size:.8rem;color:var(--accent-deep)}
+.mc-p{margin:0;line-height:1.7}
+a.mc-cta.lnk{display:block;text-align:center;text-decoration:none;box-sizing:border-box}
+.mc-nhd h3::before{display:none}
+.mc-art.fx{color:#33373D}
+.mc-chips button{padding:8px 15px;font-size:.9rem}
+/* 共同知識大卡第二版：上＝來源（小字）＋標題＋標籤；下（白色區）＝內容。深淺色各一套配色 */
+.mc-img.nh{height:auto;min-height:0;padding:14px 16px 16px;display:grid;gap:8px;background:linear-gradient(135deg,var(--hz),color-mix(in srgb,var(--hz) 72%,#000))}
+.mc-img.nh::after{display:none}
+.mc-img.nh.rd{background:linear-gradient(135deg,#4A4F57,#2B2F35)}
+.mc-src{font-size:.72rem;opacity:.85;padding-right:46px;line-height:1.4}
+.mc-ic{position:absolute;right:14px;top:12px;width:38px;height:38px;border-radius:99px;background:rgba(255,255,255,.95);display:grid;place-items:center}
+.mc-ic svg{width:22px;height:22px;fill:none;stroke:var(--hz);stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.mc-title{font-size:1.15rem;line-height:1.45;font-weight:900;padding-right:6px}
+.mc-tags{display:flex;gap:6px;flex-wrap:wrap}
+.mc-tags i{font-style:normal;font-size:.72rem;font-weight:700;background:rgba(255,255,255,.22);border-radius:99px;padding:2px 9px}
+.mc-news .mc-txt{gap:6px}
+.mc-clamp3{display:-webkit-box!important;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;line-height:1.65;font-size:.92rem;color:var(--ink)!important}
+.mc-more{font-size:.82rem!important;font-weight:700;color:var(--accent-deep)!important}
+/* 深色模式：不用整片亮色，改成深底＋危害色左邊條、圖示與標籤用危害色，避免刺眼 */
+:root[data-theme="dark"] .mc-img.nh{background:color-mix(in srgb,var(--hz) 26%,#14171C);box-shadow:inset 5px 0 0 var(--hz)}
+:root[data-theme="dark"] .mc-img.nh.rd{background:#20242A;box-shadow:inset 5px 0 0 #8A919B}
+:root[data-theme="dark"] .mc-ic{background:color-mix(in srgb,var(--hz) 30%,#14171C)}
+:root[data-theme="dark"] .mc-ic svg{stroke:color-mix(in srgb,var(--hz) 45%,#fff)}
+:root[data-theme="dark"] .mc-tags i{background:color-mix(in srgb,var(--hz) 40%,#14171C);color:color-mix(in srgb,var(--hz) 35%,#fff)}
+@media (prefers-color-scheme: dark){
+ :root:not([data-theme="light"]) .mc-img.nh{background:color-mix(in srgb,var(--hz) 26%,#14171C);box-shadow:inset 5px 0 0 var(--hz)}
+ :root:not([data-theme="light"]) .mc-img.nh.rd{background:#20242A;box-shadow:inset 5px 0 0 #8A919B}
+ :root:not([data-theme="light"]) .mc-ic{background:color-mix(in srgb,var(--hz) 30%,#14171C)}
+ :root:not([data-theme="light"]) .mc-ic svg{stroke:color-mix(in srgb,var(--hz) 45%,#fff)}
+ :root:not([data-theme="light"]) .mc-tags i{background:color-mix(in srgb,var(--hz) 40%,#14171C);color:color-mix(in srgb,var(--hz) 35%,#fff)} }
+.mc-title{padding-right:44px}.mc-src{padding-right:48px}
+/* 共同知識大卡第三版：上＝來源小字＋大字（危害類型／來源）＋圖示；下（白色區）＝標題＋內容 */
+.mc-img.nh2{height:auto;padding:14px 18px 20px;background:radial-gradient(120% 90% at 85% 40%,color-mix(in srgb,var(--hz) 70%,#fff) 0,var(--hz) 50%,color-mix(in srgb,var(--hz) 70%,#000) 100%)}
+.mc-img.nh2.rd{background:radial-gradient(120% 90% at 85% 40%,#5B6270 0,#33373D 55%,#1F2226 100%)}
+.mc-img.nh2::after{display:none}
+.mc-img.nh2 .mc-src{display:block;padding-right:110px}
+.mc-big2{display:block;margin-top:6px;font-weight:900;font-size:2.6rem;line-height:1.1;letter-spacing:.04em;padding-right:110px}
+.mc-img.nh2 .mc-art.nz{top:50%;transform:translateY(-50%);width:92px;height:92px}
+.mc-img.nh2 .mc-art.nz svg{stroke:var(--hz)}
+.mc-img.nh2.rd .mc-art.nz svg{stroke:#33373D}
+.mc-t2{font-size:1.05rem!important;line-height:1.45}
+:root[data-theme="dark"] .mc-img.nh2{background:color-mix(in srgb,var(--hz) 26%,#14171C);box-shadow:inset 5px 0 0 var(--hz)}
+:root[data-theme="dark"] .mc-img.nh2.rd{background:#20242A;box-shadow:inset 5px 0 0 #8A919B}
+:root[data-theme="dark"] .mc-img.nh2 .mc-big2{color:color-mix(in srgb,var(--hz) 40%,#fff)}
+:root[data-theme="dark"] .mc-img.nh2 .mc-art.nz{background:color-mix(in srgb,var(--hz) 30%,#14171C)}
+:root[data-theme="dark"] .mc-img.nh2 .mc-art.nz svg{stroke:color-mix(in srgb,var(--hz) 45%,#fff)}
+@media (prefers-color-scheme: dark){
+ :root:not([data-theme="light"]) .mc-img.nh2{background:color-mix(in srgb,var(--hz) 26%,#14171C);box-shadow:inset 5px 0 0 var(--hz)}
+ :root:not([data-theme="light"]) .mc-img.nh2.rd{background:#20242A;box-shadow:inset 5px 0 0 #8A919B}
+ :root:not([data-theme="light"]) .mc-img.nh2 .mc-big2{color:color-mix(in srgb,var(--hz) 40%,#fff)}
+ :root:not([data-theme="light"]) .mc-img.nh2 .mc-art.nz{background:color-mix(in srgb,var(--hz) 30%,#14171C)}
+ :root:not([data-theme="light"]) .mc-img.nh2 .mc-art.nz svg{stroke:color-mix(in srgb,var(--hz) 45%,#fff)} }
+/* 我的進度「更多」列 */
+.mc-row{display:flex;align-items:center;gap:12px;padding:14px 16px}
+.mc-ricon{flex:none;width:42px;height:42px;border-radius:99px;background:var(--accent-soft);display:grid;place-items:center}
+.mc-ricon svg{width:22px;height:22px;fill:none;stroke:var(--accent-deep);stroke-width:2.2;stroke-linecap:round}
+.mc-rt{flex:1;display:grid;gap:1px}.mc-rt b{font-size:1.02rem}.mc-rt span{font-size:.8rem;color:var(--muted)}
+.mc-rgo{font-size:1.4rem;color:var(--muted)}
+.mc-body .card{box-shadow:none}
+/* 我的進度、共同知識：膠囊列往下滑時固定在上方 */
+.mc-chips{position:sticky;top:env(safe-area-inset-top,0px);z-index:4;background:var(--bg);box-shadow:0 0 0 100vmax var(--bg);clip-path:inset(0 -100vmax);padding:8px 2px}
+/* 共同知識大卡第四版：色塊＝小標籤＋來源（小字，同一行）＋標題；白色區＝內容 */
+.mc-img.nh3{height:auto;padding:14px 16px 18px;display:grid;gap:10px;background:linear-gradient(135deg,var(--hz),color-mix(in srgb,var(--hz) 70%,#000))}
+.mc-img.nh3.rd{background:linear-gradient(135deg,#4A4F57,#2B2F35)}
+.mc-img.nh3::after{display:none}
+.mc-top{display:flex;align-items:center;gap:8px;flex-wrap:wrap;padding-right:46px}
+.mc-top .mc-tags i{font-size:.7rem;padding:2px 8px}
+.mc-meta{font-size:.72rem;opacity:.85}
+.mc-title3{font-size:1.22rem;line-height:1.45;font-weight:900}
+.mc-ic3{position:absolute;right:14px;top:12px;width:36px;height:36px;border-radius:99px;background:rgba(255,255,255,.95);display:grid;place-items:center}
+.mc-ic3 svg{width:20px;height:20px;fill:none;stroke:var(--hz);stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+:root[data-theme="dark"] .mc-img.nh3{background:color-mix(in srgb,var(--hz) 26%,#14171C);box-shadow:inset 5px 0 0 var(--hz)}
+:root[data-theme="dark"] .mc-img.nh3.rd{background:#20242A;box-shadow:inset 5px 0 0 #8A919B}
+:root[data-theme="dark"] .mc-img.nh3 .mc-tags i{background:color-mix(in srgb,var(--hz) 40%,#14171C);color:color-mix(in srgb,var(--hz) 35%,#fff)}
+:root[data-theme="dark"] .mc-ic3{background:color-mix(in srgb,var(--hz) 30%,#14171C)}
+:root[data-theme="dark"] .mc-ic3 svg{stroke:color-mix(in srgb,var(--hz) 45%,#fff)}
+@media (prefers-color-scheme: dark){
+ :root:not([data-theme="light"]) .mc-img.nh3{background:color-mix(in srgb,var(--hz) 26%,#14171C);box-shadow:inset 5px 0 0 var(--hz)}
+ :root:not([data-theme="light"]) .mc-img.nh3.rd{background:#20242A;box-shadow:inset 5px 0 0 #8A919B}
+ :root:not([data-theme="light"]) .mc-img.nh3 .mc-tags i{background:color-mix(in srgb,var(--hz) 40%,#14171C);color:color-mix(in srgb,var(--hz) 35%,#fff)}
+ :root:not([data-theme="light"]) .mc-ic3{background:color-mix(in srgb,var(--hz) 30%,#14171C)}
+ :root:not([data-theme="light"]) .mc-ic3 svg{stroke:color-mix(in srgb,var(--hz) 45%,#fff)} }
+
+.pg-copy{border:0;cursor:pointer;font:700 .75rem var(--f-body);color:var(--accent-deep);background:var(--accent-soft);border-radius:99px;padding:5px 11px}
+.pg-rule{display:flex;flex-wrap:wrap;align-items:center;gap:4px}.pg-rule i{width:9px;height:9px;border-radius:99px;display:inline-block}
+.pg-rule .g{background:#D9A520}.pg-rule .s{background:#A9B1BA}.pg-rule .b{background:#B87333}
+/* 進階班：大卡色塊用寶石色、香檳金收邊 */
+.mc-img{background:radial-gradient(120% 90% at 85% 40%,color-mix(in srgb,var(--gem) 65%,#fff) 0,var(--gem) 50%,var(--gem-2) 100%)}
+.mc-rib{background:var(--champ);color:#3A2C10}
+.mc-card,.mc-mini{box-shadow:0 0 0 1px color-mix(in srgb,var(--champ) 55%,transparent),0 4px 16px rgba(23,33,43,.10)}
+.mc-chips button[aria-selected="true"],.mc-chips button[aria-pressed="true"]{background:var(--gem);border-color:var(--gem);color:#fff}
+.mc-txt b,.mc-h h3{font-family:"Noto Serif TC","Songti TC",serif}
+.mc-stg .ok i{color:var(--gem)}
+.mc-pts i.on{background:var(--champ);border-color:var(--champ)}
+.mc-meter .mc-pts i,.mc-meter .mc-pts i.on{border-color:var(--gem)}.mc-meter .mc-pts i.on{background:var(--gem)}
+.mc-case{font-size:.78rem;color:var(--muted);font-weight:500}
+.mc-go{background:var(--gem)}
+.mc-wk{background:var(--gem)}
+:root[data-theme="dark"] .mc-img{background:radial-gradient(120% 90% at 85% 40%,color-mix(in srgb,var(--gem) 70%,#fff 10%) 0,var(--gem-2) 75%)}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]) .mc-img{background:radial-gradient(120% 90% at 85% 40%,color-mix(in srgb,var(--gem) 70%,#fff 10%) 0,var(--gem-2) 75%)} }
+body[data-role="common"]{--gem:#3A3F47;--gem-2:#25292F}
 
 /* ===== 共同知識卡片（基礎班、進階班共用）===== */
 :root{--kx-apricot:#E9893F;--kx-apricot-soft:#FDEBD9;--kx-apricot-ink:#9A4F12}
@@ -844,13 +1176,23 @@ function nsBoot(o){
   let done=false; const fallback=setTimeout(()=>{ if(!done){ done=true; o.after(); } },2500);
   Promise.all([get(o.fsUrl),get(o.rdUrl)]).then(([fs,rd])=>{
     if(fs||rd) o.onData(fs||[],rd||[]);
+    if(o.banner){ /* 基礎班 2026-11-05：新知橫幅常駐在今日關卡首頁，沒看過的才有 NEW */
+      const f0=nsSort(fs||[])[0], r0=nsSort(rd||[])[0], sn=ls.get("newsSeen",[]);
+      NS_FRESH={f:f0||null,r:r0||null,nw:[f0,r0].some(x=>x&&!sn.includes(NS_ID(x))),mark:()=>{ const s=ls.get("newsSeen",[]); [f0,r0].forEach(x=>{ if(x&&!s.includes(NS_ID(x))) s.push(NS_ID(x)); }); ls.set("newsSeen",s.slice(-40)); }};
+      if(o.onFresh) o.onFresh(); if(!done){ done=true; clearTimeout(fallback); o.after(); } return; }
     if(done) return; done=true; clearTimeout(fallback);
     const f=nsSort(fs||[])[0], r=nsSort(rd||[])[0], seen=ls.get("newsSeen",[]);
     const fresh=[f,r].filter(x=>x&&!seen.includes(NS_ID(x)));
-    if(!fresh.length||nsActed||!o.eligible()){ o.after(); return; }
+    if(!fresh.length||(nsActed&&!o.banner)||!o.eligible()){ o.after(); return; }
     nsShowCover(f,r,()=>{ const s=ls.get("newsSeen",[]); [f,r].forEach(x=>{ if(x&&!s.includes(NS_ID(x))) s.push(NS_ID(x)); }); ls.set("newsSeen",s.slice(-40)); },o);
   });
 }
+/* 今日關卡首頁的新知橫幅（基礎班）；點了記成看過並跳到共同知識 */
+let NS_FRESH=null;
+function nsMarkSeen(){ if(NS_FRESH&&NS_FRESH.nw){ NS_FRESH.mark(); NS_FRESH.nw=false; } }
+function nsBannerHTML(){ if(!NS_FRESH) return ""; const f=NS_FRESH.f, r=NS_FRESH.r, e=f||r, nw=NS_FRESH.nw; if(!e) return "";
+  const h=f?nsHaz(f):null, kick=f?`${nsMD(f.date)} 食安提醒`:`${nsMD(r.date)} 推薦閱讀`;
+  return `<button type="button" class="hm-news" data-act="gonews"><span class="hm-nt"><span class="hm-nk">${nw?`<em>NEW</em>${kick}`:`本週新知・${kick}`}</span><b>${esc(f?nsTitle(f):r.title||"")}</b>${f?`<span class="hm-ntag">${h?`<i class="${h[1]}">${h[0]}</i>`:""}<i>${esc(nsProd(f))}</i>${f.country?`<i>${esc(f.country)}</i>`:""}</span>`:""}<span class="hm-nm">${nw?(f&&r?"看細節＋推薦閱讀 ›":"看細節 ›"):"再看一次 ›"}</span></span><img src="img/news.webp" alt=""></button>`; }
 function nsShowCover(f,r,markSeen,o){
   const host=document.createElement("div"); host.id="ns-cover"; host.setAttribute("role","dialog"); host.setAttribute("aria-modal","true"); host.setAttribute("aria-label","本週新知");
   const d=(f&&f.date)>(r&&r.date)?f.date:(r?r.date:f.date), m=String(d||"").match(/^(\d{4})-(\d{2})-(\d{2})/);
@@ -880,7 +1222,7 @@ const todayStr=(()=>{ const d=new Date(); return `${d.getFullYear()}-${String(d.
 let st={role:store.get("role",null),tab:"today",ptab:null,ktab:"news",flow:"yogurt",W:1,L:0,S:0,cel:false,resumed:false,onb:0,swiped:store.get("swiped",false),slideDir:null,
   first:store.get("first",{}),retry:store.get("retry",{}),retryOpen:{},ord:store.get("ord",{}),ordFirst:store.get("ordFirst",{}),ordOk:store.get("ordOk",{}),
   notes:store.get("notes",{}),done:store.get("done",{}),ach:store.get("ach",[]),days:store.get("days",[]),ends:store.get("ends",{}),
-  start:store.get("start",null),rolesSeen:store.get("rolesSeen",[]),terms:store.get("terms",[]),cs:{},sheet:null};
+  home:true,start:store.get("start",null),rolesSeen:store.get("rolesSeen",[]),terms:store.get("terms",[]),cs:{},sheet:null};
 
 function week(W){ return DATA.weeks[W-1]; }
 function lesson(W,L,r=st.role){ const w=week(W); if(!w) return null; return L<3?w.lessons[r][L]:L===3?w.common:w.case; }
@@ -990,7 +1332,7 @@ function hero(){
   const steps=[0,1,2,3,4].map(i=>{ const d=st.done[lid(st.W,i)]; return `<button type="button" data-go="${st.W}-${i}" class="${d?"done":""} ${i===st.L?"cur":""}" aria-label="${STEPN[i]}${d?" 已完成":""}"><i>${d?"✓":i+1}</i>${STEPN[i]}</button>`; }).join("");
   const cs=st.cs[st.W]; const tr=(st.L===4&&cs&&cs.trail.length)?`<div class="trail">${cs.trail.map(t=>`<span>${esc(t)}</span>`).join("")}</div>`:"";
   const sug=sugDate(st.W);
-  return `<div class="hero"><div class="meta"><span>第 ${st.W} 週 · ${n}/5 關${sug?` · 建議 ${sug} 起`:""}</span><span>這關約 ${l.mins||3} 分鐘</span></div><div class="hrow"><div class="tt">${esc(st.L===4?"案例："+l.title:st.L===3?"共同課："+l.title:w.title[st.role])}</div>${window.isleThumbHTML?isleThumbHTML():""}</div><div class="steps">${steps}</div>${tr}${(st.L<4&&!st.done[lid(st.W,4)])?`<button type="button" class="hteaser" data-go="${st.W}-4">本週五案例：<b>${esc(w.case.title)}</b>　先看看 ›</button>`:""}</div>`;
+  return `<button type="button" class="hm-back" data-act="home">‹ 今日首頁</button><div class="hero"><div class="meta"><span>第 ${st.W} 週 · ${n}/5 關${sug?` · 建議 ${sug} 起`:""}</span><span>這關約 ${l.mins||3} 分鐘</span></div><div class="hrow"><div class="tt">${esc(st.L===4?"案例："+l.title:st.L===3?"共同課："+l.title:w.title[st.role])}</div>${window.isleThumbHTML?isleThumbHTML():""}</div><div class="steps">${steps}</div>${tr}${(st.L<4&&!st.done[lid(st.W,4)])?`<button type="button" class="hteaser" data-go="${st.W}-4">本週五案例：<b>${esc(w.case.title)}</b>　先看看 ›</button>`:""}</div>`;
 }
 const COARSE=(()=>{ try{ return matchMedia("(pointer: coarse)").matches; }catch(e){ return false; } })();
 function lessonView(){
@@ -1043,9 +1385,36 @@ function onbView(){
 }
 function todayView(){
   if(!st.role) return onbView();
+  if(st.home&&!st.cel){ const h=homeView(); if(h) return h; }
   const l=lesson(st.W,st.L);
   const resume=st.resumed?`<div class="resume"><span>從上次停下的地方繼續：第 ${st.W} 週${STEPN[st.L]}${st.L===4?"":`，第 ${st.S+1} 張`}</span><button type="button" class="btn ghost" data-act="hideresume">知道了</button></div>`:"";
   return resume+hero()+lessonView();
+}
+
+/* ================= 今日首頁（2026-11 改版：寶石色＋香檳金，升職版人物） ================= */
+const HM_IMG={qa:"img/aqa.webp",prod:"img/aprod.webp",line:"img/aline.webp",ev:"img/tech.webp",insp:"img/insp.webp"};
+const HM_PRE=Object.values(HM_IMG).map(u=>{ const i=new Image(); i.decoding="async"; i.src=u; return i; });
+function hmLoaded(img){ img.classList.add("in"); }
+function hmCur(){ if(st.resumed&&!st.done[lid(st.W,st.L)]) return {W:st.W,L:st.L,S:st.S,res:true}; const n=nextAfter(); return n?{W:n.W,L:n.L,S:0}:null; }
+function hmGoal(){ for(let W=1;W<=WEEKS;W++){ if(weekTier(W)==="bronze"){ const m=weekMissing(W).length; return {W,t:m?`還差 ${m} 題`:"看完錯題回顧"}; } } return null; }
+function homeView(){
+  const c=hmCur(), W=c?c.W:WEEKS, w=week(W), n=weekDone(W);
+  const id=`<button type="button" class="hm-id" data-act="hmprog" aria-label="查看我的進度"><span class="hm-tag">${ROLES[st.role]}・進階</span><span class="hm-wk">第 ${W} 週</span><span class="hm-bar"><i style="width:${n*20}%"></i></span><span class="hm-n">${n}/5 關</span></button>`;
+  const news=(typeof nsBannerHTML==="function")?nsBannerHTML():"";
+  const stg=STEPN.map((t,i)=>{ const ok=!!st.done[lid(W,i)], now=c&&i===c.L&&!ok; return `<span class="${ok?"ok":now?"now":""}"><i></i>${t}</span>`; }).join("");
+  const l=c?lesson(c.W,c.L):null;
+  const cta=c?`<button type="button" class="hm-cta" data-act="homego">${c.res?`繼續・${STEPN[c.L]} 第 ${c.S+1} 張`:`開始今日關卡・${STEPN[c.L]}`} ›</button><span class="hm-s c">這關約 ${(l&&l.mins)||3} 分鐘</span>`
+    :`<button type="button" class="hm-cta done" data-act="hmprog">全部完成・看結業卡 ›</button>`;
+  const site=(typeof window.isleHeroHTML==="function")?window.isleHeroHTML(W):"";
+  const hero=`<section class="hm-hero"><button type="button" class="hm-pic" data-isle="open" aria-label="打開本週工地">${site}<span class="hm-chip">本週工地 ›</span><img class="hm-ch ${st.role}" src="${HM_IMG[st.role]}" alt="" loading="eager" decoding="async" onload="hmLoaded(this)" onerror="hmLoaded(this)"></button>
+    <div class="hm-body"><div class="hm-k">第 ${W} 週主題</div><h2>${esc(w.title[st.role])}</h2><div class="hm-stg">${stg}</div>${cta}</div></section>`;
+  const cs=(c&&c.L<4&&!st.done[lid(W,4)])?`<button type="button" class="hm-case" data-go="${W}-4"><span class="hm-k">本週五案例・多輪判斷</span><b>${esc(w.case.title)}</b><span class="hm-go">先看看 ›</span></button>`:"";
+  const pend=(typeof window.islePending==="function")?window.islePending():[];
+  const pc=pend.map(p=>`<button type="button" class="hm-task ${p.k==="ev"?"ev":"in"}" data-isle="${p.k}"><span class="hm-tp"><img src="${p.k==="ev"?HM_IMG.ev:HM_IMG.insp}" alt=""><em>${p.k==="ev"?"兩回合":p.k==="aud"?"外部":"本週內"}</em></span><b>${p.k==="ev"?"停電待搶修":p.k==="aud"?"外部稽核來訪":"稽查員來訪"}</b><span>${p.k==="ev"?"答對 2 題恢復供電":p.k==="aud"?"兩回合・通過拿證書":"本週 1 次・答對種樹"}</span></button>`).join("");
+  const tasks=pc?`<section class="hm-sec"><h3>待處理</h3><div class="hm-tasks">${pc}</div></section>`:"";
+  const g=hmGoal(); uid=0;
+  const goal=g?`<button type="button" class="hm-goal" data-act="gomtip" data-w="${g.W}"><span class="hm-gm">${medal("bronze",DATA.motifs[st.role][g.W-1],"W"+g.W)}</span><span class="hm-gt"><span class="hm-s">下一個獎章・第 ${g.W} 週</span><b>銅 → 銀：${g.t}</b></span><span class="hm-go">去補題 ›</span></button>`:"";
+  return `<div class="hm adv">${id}${news}${hero}${cs}${tasks}${goal}</div>`;
 }
 
 /* ================= 我的進度 ================= */
@@ -1058,39 +1427,75 @@ function restoreCode(code){ try{ const s=code.trim(); if(!s.startsWith("XFA1."))
   if(!st.role&&o.role){ st.role=o.role; store.set("role",st.role); }
   if(o.isle&&window.isleRestore) isleRestore(o.isle);
   return true; }catch(e){ return false; } }
+/* ---------- 2026-11-05：我的進度、共同知識比照基礎班（麥當勞式大卡＋膠囊＋底部抽屜），寶石色＋香檳金 ---------- */
+const MC_TN={gold:"金牌",silver:"銀牌",bronze:"銅牌"};
+function mcDots(k,n,cls){ return `<span class="mc-pts ${cls||""}">${Array.from({length:n},(_,i)=>`<i class="${i<k?"on":""}" style="--i:${i}"></i>`).join("")}</span>`; }
+function mcStat(W){ const qs=allQuizBlocks(W); const ms=weekMissing(W).length; return {total:qs.length, ans:Math.max(0,qs.length-ms), lessons:weekDone(W)}; }
+function mcOpen(html){
+  let el=document.getElementById("mc-sheet");
+  if(!el){ el=document.createElement("div"); el.id="mc-sheet"; el.innerHTML=`<div class="mc-bd" data-mc="close"></div><div class="mc-panel" role="dialog" aria-modal="true"><div class="mc-grab" data-mc="close"><i></i></div><button type="button" class="mc-x" data-mc="close" aria-label="關閉">×</button><div class="mc-body"></div></div>`; document.body.appendChild(el);
+    el.addEventListener("click",e=>{ if(e.target.closest("[data-mc=close]")) mcClose(); else if(e.target.closest("[data-act],[data-go]")&&!e.target.closest("[data-act=bkcopy],[data-act=bkload],[data-act=copynote1],[data-act=copyall]")) setTimeout(mcClose,0); });
+    const pn=el.querySelector(".mc-panel"); let y0=null, dy=0;
+    pn.addEventListener("touchstart",e=>{ if(pn.querySelector(".mc-body").scrollTop>0) return; y0=e.touches[0].clientY; dy=0; pn.style.transition="none"; },{passive:true});
+    pn.addEventListener("touchmove",e=>{ if(y0==null) return; dy=Math.max(0,e.touches[0].clientY-y0); pn.style.transform=`translateY(${dy}px)`; },{passive:true});
+    pn.addEventListener("touchend",()=>{ if(y0==null) return; pn.style.transition=""; pn.style.transform=""; if(dy>90) mcClose(); y0=null; }); }
+  el.querySelector(".mc-body").innerHTML=html; el.classList.add("on"); document.body.style.overflow="hidden";
+}
+function mcClose(){ const el=document.getElementById("mc-sheet"); if(el) el.classList.remove("on"); document.body.style.overflow=""; }
+function mcWeekSheet(W){
+  const r=st.role, t=weekTier(W), stt=mcStat(W), ms=weekMissing(W), w=week(W);
+  const steps=[0,1,2,3,4].map(L=>{ const ok=!!st.done[lid(W,L)]; return `<li class="${ok?"ok":""}"><i>${ok?"✓":L+1}</i><span>${STEPN[L]}｜${esc(lesson(W,L).title)}</span>${ok?"":`<button type="button" class="mc-go" data-go="${W}-${L}">去上課</button>`}</li>`; }).join("");
+  const miss=ms.length?`<h4>還缺 ${ms.length} 題</h4><ul class="mc-miss">${ms.map((m,j)=>`<li><span>${esc(missLabel(m))}</span><button type="button" class="mc-go" data-act="miss" data-w="${W}" data-j="${j}">前往</button></li>`).join("")}</ul>`:"";
+  const stamp=t==="gold"?`<span class="mc-stamp">全對</span>`:t==="silver"?`<span class="mc-stamp s">完成</span>`:"";
+  const ct=caseTier(W);
+  return `<div class="mc-shead"><span class="mc-smed">${medal(t,DATA.motifs[r][W-1],"W"+W)}${stamp}</span><div><span class="hm-s">第 ${W} 週</span><h3>${esc(w.title[r])}</h3><b class="mc-tier ${t||""}">${t?MC_TN[t]:`${weekDone(W)}／5 關`}</b></div></div>
+    <div class="mc-meter"><div><span>關卡</span>${mcDots(stt.lessons,5)}<em>${stt.lessons}/5</em></div><div><span>題目</span>${mcDots(stt.ans,stt.total)}<em>${stt.ans}/${stt.total}</em></div><div><span>案例</span><span class="mc-case">${ct?MC_TN[ct]:"還沒走到結局"}・${esc(w.case.title)}</span><em></em></div></div>
+    ${miss}<h4>這週 5 關</h4><ul class="mc-steps">${steps}</ul>`;
+}
 function progView(){
   const r=st.role, mc=medalCount(), pt=st.ptab||(mc?"medal":"prog");
-  const seg=`<div class="pseg" role="tablist" aria-label="我的進度">${[["medal","獎章"],["prog","進度"],["note","筆記"]].map(([k,t])=>`<button type="button" role="tab" aria-selected="${pt===k}" data-act="ptab" data-v="${k}">${t}</button>`).join("")}</div>`;
+  const total=WEEKS*5, n=DATA.weeks.reduce((a,_,i)=>a+weekDone(i+1),0);
+  const tiers=DATA.weeks.map((_,i)=>weekTier(i+1)); const tn={gold:0,silver:0,bronze:0}; tiers.forEach(t=>{ if(t) tn[t]++; });
+  const nk=Object.keys(st.notes).filter(k=>{ const q=parseKey(k); return q&&(!q.role||q.role===r)&&(st.notes[k]||"").trim(); });
+  const chips=`<div class="mc-chips" role="tablist" aria-label="我的進度">${[["medal",`獎章 ${tn.gold+tn.silver+tn.bronze}`],["prog",`進度 ${n}/${total}`],["note",`筆記 ${nk.length}`]].map(([k,t])=>`<button type="button" role="tab" aria-selected="${pt===k}" data-act="ptab" data-v="${k}">${t}</button>`).join("")}</div>`;
   if(pt==="medal"){
-    const tiers=DATA.weeks.map((_,i)=>weekTier(i+1)); const tn={gold:0,silver:0,bronze:0}; tiers.forEach(t=>{ if(t) tn[t]++; });
-    const wall=DATA.weeks.map((w,i)=>tiers[i]==="bronze"?`<button type="button" class="c mbtn ${st.mtipW===i+1?"on":""}" data-act="mtip" data-w="${i+1}" aria-expanded="${st.mtipW===i+1}" aria-label="第 ${i+1} 週銅牌，看怎麼升級">${medal(tiers[i],DATA.motifs[r][i],"W"+(i+1))}<span>${esc(w.title[r])}</span></button>`:`<div class="c">${medal(tiers[i],DATA.motifs[r][i],"W"+(i+1))}<span>${esc(w.title[r])}</span></div>`).join("");
-    const mw=st.mtipW, ms=mw&&tiers[mw-1]==="bronze"?weekMissing(mw):[];
-    const mtip=ms.length?`<div class="mtip"><b>第 ${mw} 週 · 銅牌：還有 ${ms.length} 題沒完成</b><p class="small">答完就能升級；第一次就答對（排序題排對過）是金牌。</p><ul>${ms.map((m,j)=>`<li><span>${esc(missLabel(m))}</span><button type="button" class="btn ghost" data-act="miss" data-w="${mw}" data-j="${j}">前往</button></li>`).join("")}</ul></div>`:"";
-    const cwall=DATA.weeks.map((w,i)=>`<div class="c">${medal(caseTier(i+1),w.case.motif,"C"+(i+1))}<span>${esc(w.case.title)}</span></div>`).join("");
-    const ach=ACH.map(a=>{const on=st.ach.includes(a.k);return `<div class="a ${on?"on":""}"><div class="ic">${on?"★":"？"}</div><div><b>${on?a.t:"隱藏成就"}</b><span>${on?esc(a.how):"提示："+esc(a.hint)}</span></div></div>`;}).join("");
     let grad="";
     if(st.done[lid(WEEKS,4)]){ let gd=store.get("grad",""); if(!gd){ gd=todayStr; store.set("grad",gd); }
       const cg=DATA.weeks.filter((_,i)=>caseTier(i+1)==="gold").length;
       grad=`<section class="card grad"><div class="eyebrow">雪坊幹部學堂 · 進階班</div><h2>結業</h2><p class="gr-role">${esc(ROLES[r])} · 完成 16 週課程與結業挑戰</p><div class="gr-st"><div><b>${tn.gold}</b><span>週金牌</span></div><div><b>${tn.silver}</b><span>週銀牌</span></div><div><b>${cg}</b><span>案例金牌</span></div><div><b>${st.ach.length}/${ACH.length}</b><span>隱藏成就</span></div></div><p class="small">結業日 ${esc(gd)} · 累積學習 ${st.days.length} 天。這張卡不記名，截圖就是你的結業紀錄。</p></section>`; }
-    return seg+grad+`<section class="card"><h2>週獎章</h2><p class="small">金 ${tn.gold} · 銀 ${tn.silver} · 銅 ${tn.bronze}。5 關完成是銅牌；測驗題都答完是銀牌；第一次作答就全對是金牌（排序題重排排對也算）。</p><div class="wall">${wall}</div>${tn.bronze?`<p class="small mhint">點銅牌，看還差什麼就能升級</p>`:""}${mtip}</section>
-    <section class="card"><h2>案例獎章</h2><p class="small">週五案例走到越好的結局，顏色越好；可以重玩升級。</p><div class="wall">${cwall}</div></section>
-    <section class="card"><h2>隱藏成就 · ${st.ach.length}/${ACH.length}</h2><p class="small">沒拿到前只看得到提示，拿到才顯示名稱和條件。</p><div class="ach">${ach}</div></section>`;
+    const g=hmGoal(); let big;
+    if(g){ const stt=mcStat(g.W), left=stt.total-stt.ans;
+      big=`<button type="button" class="mc-card" data-act="mcweek" data-w="${g.W}"><span class="mc-img"><span class="mc-rib">下一個目標</span><span class="mc-big">${left?`還差<b>${left}</b>題`:`看錯題<b>重練</b>`}</span><span class="mc-sub2">銅牌 → 銀牌</span><span class="mc-art">${medal("silver",DATA.motifs[r][g.W-1],"W"+g.W)}</span>${mcDots(stt.ans,Math.min(stt.total,12),"lt")}</span><span class="mc-txt"><b>第 ${g.W} 週・${esc(week(g.W).title[r])}</b><span>點開看還缺哪幾題</span></span></button>`; }
+    else { let bw=1,bd=-1; for(let x=1;x<=WEEKS;x++){ const q=weekDone(x); if(q>bd&&q<5){bd=q;bw=x;} }
+      big=bd<0?"":`<button type="button" class="mc-card" data-act="mcweek" data-w="${bw}"><span class="mc-img"><span class="mc-rib">${mc?"下一枚獎章":"第一枚獎章"}</span><span class="mc-big">再<b>${5-bd}</b>關</span><span class="mc-sub2">5 關完成就拿銅牌</span><span class="mc-art">${medal("bronze",DATA.motifs[r][bw-1],"W"+bw)}</span>${mcDots(bd,5,"lt")}</span><span class="mc-txt"><b>第 ${bw} 週・${esc(week(bw).title[r])}</b><span>點開看這週的關卡</span></span></button>`; }
+    const cards=tiers.map((t,i)=>`<button type="button" class="mc-mini ${t||"none"}" data-act="mcweek" data-w="${i+1}"><span class="mc-mimg">${medal(t,DATA.motifs[r][i],"W"+(i+1))}</span><b>W${i+1}・${esc(DATA.weeks[i].title[r])}</b><span>${t?MC_TN[t]:weekDone(i+1)?`${weekDone(i+1)}/5 關`:"還沒開始"}</span></button>`).join("");
+    const ccards=DATA.weeks.map((w,i)=>{ const t=caseTier(i+1); return `<button type="button" class="mc-mini ${t||"none"}" data-go="${i+1}-4"><span class="mc-mimg">${medal(t,w.case.motif,"C"+(i+1))}</span><b>${esc(w.case.title)}</b><span>${t?MC_TN[t]:"點一下去走案例"}</span></button>`; }).join("");
+    const ach=ACH.map(a=>{const on=st.ach.includes(a.k);return `<div class="a ${on?"on":""}"><div class="ic">${on?"★":"？"}</div><div><b>${on?a.t:"隱藏成就"}</b><span>${on?esc(a.how):"提示："+esc(a.hint)}</span></div></div>`;}).join("");
+    return chips+grad+big+`<section class="mc-sec"><div class="mc-h"><h3>週獎章</h3><span>金 ${tn.gold}・銀 ${tn.silver}・銅 ${tn.bronze}　左右滑 ›</span></div><div class="mc-car">${cards}</div></section>
+    <section class="mc-sec"><div class="mc-h"><h3>案例獎章</h3><span>結局越好顏色越好・可重玩　左右滑 ›</span></div><div class="mc-car">${ccards}</div></section>
+    <section class="card"><h2>隱藏成就 · ${st.ach.length}/${ACH.length}</h2><p class="small">沒拿到前只看得到提示，拿到才顯示名稱和條件。</p><div class="ach">${ach}</div></section>
+    <p class="small pg-rule"><i class="b"></i>銅：5 關完成　<i class="s"></i>銀：測驗題都答完　<i class="g"></i>金：第一次全對</p>`;
   }
   if(pt==="note"){
-    const nk=Object.keys(st.notes).filter(k=>{ const q=parseKey(k); return q&&(!q.role||q.role===r)&&(st.notes[k]||"").trim(); });
-    const notes=nk.length?nk.map(k=>{ const q=parseKey(k); const l=lesson(q.W,q.L,q.role||r); return `<div class="note"><b>第 ${q.W} 週 · ${STEPN[q.L]}｜${esc(l.title)}</b><p>${esc(st.notes[k])}</p></div>`; }).join(""):`<p class="small">在每關的「想一想」寫下的內容會集中在這裡，可以一次複製，貼到週報或 1:1 紀錄。</p>`;
-    return seg+`<section class="card"><h2>我的筆記</h2>${notes}${nk.length?`<div class="btns"><button type="button" class="btn ghost" data-act="copyall">複製全部筆記</button><span class="small" id="copymsg"></span></div>`:""}</section>`;
+    const L=nk.map(k=>{ const q=parseKey(k); const l=lesson(q.W,q.L,q.role||r); return `<div class="mc-card mc-note"><span class="mc-nh"><span class="mc-wk">W${q.W}</span><b>${STEPN[q.L]}｜${esc(l.title)}</b></span><span class="mc-nb">${esc(st.notes[k])}</span><span class="mc-nf"><button type="button" class="pg-copy" data-act="copynote1" data-k="${esc(k)}">複製</button></span></div>`; }).join("");
+    return chips+(nk.length?`<div class="mc-h"><h3>我的筆記</h3><button type="button" class="pg-copy" data-act="copyall">全部複製</button></div><span class="small" id="copymsg" aria-live="polite"></span>${L}`
+      :`<div class="mc-card mc-static"><span class="mc-img sm"><span class="mc-big">還沒有<b>筆記</b></span><span class="mc-sub2">每關最後的「想一想」寫下的內容會出現在這裡，可以一次複製貼到週報或 1:1 紀錄</span></span></div>`);
   }
-  const total=WEEKS*5, n=DATA.weeks.reduce((a,_,i)=>a+weekDone(i+1),0), pct=n/total, C=2*Math.PI*30;
-  const best=Math.max(...DATA.weeks.map((_,i)=>weekDone(i+1)));
-  const firstH = mc ? "" : `<section class="card"><h2>再完成 ${5-best} 關，就拿到第一枚獎章</h2><p class="small">一週 5 關都完成是銅牌；走完週五案例也有案例獎章。</p></section>`;
+  const nu=nextAfter(), W=nu?nu.W:WEEKS, k=weekDone(W);
+  const stg=STEPN.map((t,i)=>{ const ok=!!st.done[lid(W,i)]; return `<span class="${ok?"ok":nu&&i===nu.L?"now":""}"><i>${ok?"✓":i+1}</i>${t}</span>`; }).join("");
+  const big=`<button type="button" class="mc-card" ${nu?`data-go="${nu.W}-${nu.L}"`:`data-act="ptab" data-v="medal"`}><span class="mc-img"><span class="mc-rib">本週進度</span><span class="mc-big">第<b>${W}</b>週</span><span class="mc-stg">${stg}</span></span><span class="mc-txt"><b>${esc(week(W).title[r])}</b><span>${k}／5 關${nu?`・下一關：${STEPN[nu.L]}・點一下繼續上課`:"・全部完成"}</span></span></button>`;
+  const wk=DATA.weeks.map((w,i)=>{ const x=i+1, q=weekDone(x); return `<button type="button" class="mc-mini wk ${q===5?"full":q?"part":"none"}" data-act="mcweek" data-w="${x}"><span class="mc-ring" style="--p:${q*20}"><b>${q}/5</b></span><b>W${x}・${esc(w.title[r])}</b><span>${q===5?"完成":q?"進行中":st.start?`建議 ${sugDate(x)} 起`:"未開始"}</span></button>`; }).join("");
+  const A=(typeof window.isleAreaHTML==="function")?window.isleAreaHTML():null;
+  const area=A?`<button type="button" class="mc-card" data-isle="openarea"><span class="mc-img mc-area">${A.svg.replace("<svg ","<svg preserveAspectRatio=\"xMidYMid slice\" ")}<span class="mc-rib">我的園區</span></span><span class="mc-txt"><b>已完工 ${A.built}／16 棟${A.gold?`・全對 ${A.gold} 棟`:""}${A.trees?`・樹 ${A.trees} 棵`:""}</b><span>累積學習 ${st.days.length} 天・點開看全區、證書與里程碑</span></span></button>`:"";
   const cw=curWeekBySchedule();
-  const cat=DATA.weeks.map((w,i)=>{ const W=i+1, k=weekDone(W);
-    const items=[0,1,2,3,4].map(L=>{ const d=st.done[lid(W,L)]; return `<li><button type="button" data-go="${W}-${L}"><span class="ck ${d?"on":""}">${d?"✓":""}</span><span>${STEPN[L]}｜${esc(lesson(W,L).title)}</span></button></li>`; }).join("");
-    return `<details ${W===st.W?"open":""}><summary><span class="wk">W${String(W).padStart(2,"0")}</span><span class="nm"><b>${esc(w.title[r])}</b><small>共同課：${esc(w.common.title)}${st.start?` · <span class="sug">建議 ${sugDate(W)} 起</span>`:""}</small></span><span class="stt">${k}/5</span></summary><ul>${items}</ul></details>`; }).join("");
-  return seg+firstH+`${window.isleAreaCard?isleAreaCard(n,total):`<div class="ring"><svg viewBox="0 0 76 76"><circle cx="38" cy="38" r="30" fill="none" stroke="var(--line)" stroke-width="8"/><circle cx="38" cy="38" r="30" fill="none" stroke="var(--accent)" stroke-width="8" stroke-linecap="round" stroke-dasharray="${C*pct} ${C}" transform="rotate(-90 38 38)"/><text x="38" y="38" text-anchor="middle" dominant-baseline="central" font-size="15" font-weight="700" fill="var(--ink)" font-family="var(--f-body)">${Math.round(pct*100)}%</text></svg><div class="rt"><b>${ROLES[r]} · ${n} / ${total} 關</b><span>累積學習 ${st.days.length} 天 · 依起始日現在是第 ${cw} 週</span><span>請假或輪班中斷，天數不會歸零</span></div></div>`}
+  const cat=DATA.weeks.map((w,i)=>{ const W2=i+1, k2=weekDone(W2);
+    const items=[0,1,2,3,4].map(L=>{ const d=st.done[lid(W2,L)]; return `<li><button type="button" data-go="${W2}-${L}"><span class="ck ${d?"on":""}">${d?"✓":""}</span><span>${STEPN[L]}｜${esc(lesson(W2,L).title)}</span></button></li>`; }).join("");
+    return `<details ${W2===st.W?"open":""}><summary><span class="wk">W${String(W2).padStart(2,"0")}</span><span class="nm"><b>${esc(w.title[r])}</b><small>共同課：${esc(w.common.title)}${st.start?` · <span class="sug">建議 ${sugDate(W2)} 起</span>`:""}</small></span><span class="stt">${k2}/5</span></summary><ul>${items}</ul></details>`; }).join("");
+  window.__mcMore=`<div class="mc-nhd"><h3>更多</h3><span class="hm-s">依起始日現在是第 ${cw} 週・請假或輪班中斷，天數不會歸零</span></div>
   <section class="card"><h2>完整目錄</h2><div class="cat">${cat}</div></section>
   <section class="card bk"><h2>備份我的進度</h2><p class="small">進度只存在這支手機的這個瀏覽器。換手機或清除資料前，先複製進度碼存起來（例如傳給自己），之後貼回來就能還原。</p><code id="bk-code">${esc(backupCode())}</code><div class="btns"><button type="button" class="btn ghost" data-act="bkcopy">複製進度碼</button></div><label class="small" for="bk-in">貼上進度碼還原</label><input id="bk-in" type="text" autocomplete="off" placeholder="XFA1.…"><div class="btns"><button type="button" class="btn" data-act="bkload">還原</button><span class="small" id="copymsg" aria-live="polite"></span></div></section>`;
+  const more=`<button type="button" class="mc-card mc-row" data-act="mcmore"><span class="mc-ricon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h10"/></svg></span><span class="mc-rt"><b>更多</b><span>完整目錄・備份進度碼</span></span><span class="mc-rgo">›</span></button>`;
+  return chips+big+`<section class="mc-sec"><div class="mc-h"><h3>16 週</h3><span>${n}／${total} 關　左右滑 ›</span></div><div class="mc-car">${wk}</div></section>`+area+more;
 }
 
 /* ================= 共同知識 ================= */
@@ -1106,7 +1511,8 @@ function flowView(){
   <p class="small">紅色為 CCP、橘色為 OPRP，僅供學習參考；實際分類與管制界限以本廠 HACCP 計畫為準。</p></section>`;
 }
 function knowView(){
-  const seg=`<p class="ksub">三個職務共用 · 隨時查閱</p><div class="kseg">${[["news","每週更新"],["law","勞基法"],["tools","管理工具"]].map(([k,t])=>`<button type="button" data-act="ktab" data-v="${k}" aria-pressed="${st.ktab===k}">${kxTab(k,t)}</button>`).join("")}</div>`;
+  const nw=(typeof NS_FRESH!=="undefined"&&NS_FRESH&&NS_FRESH.nw);
+  const seg=`<div class="mc-chips" role="group" aria-label="共同知識分類">${[["news","每週更新"],["law","勞基法"],["tools","管理工具"]].map(([k,t])=>`<button type="button" data-act="ktab" data-v="${k}" aria-pressed="${st.ktab===k}">${t}${k==="news"&&nw?` <em class="mc-new">NEW</em>`:""}</button>`).join("")}</div>`;
   let body="";
   if(st.ktab==="law"){ const L=DATA.laws;
     body=`<section class="card"><h2>勞基法</h2><p class="small">條文原文取自${esc(L.src.name)}（修正日期 ${esc(L.src.amended)}），${esc(L.src.checked)} 查詢。重點只寫條文直接看得出的內容；要套用到現場前，先和人資確認。</p></section>
@@ -1118,11 +1524,27 @@ function knowView(){
   return seg+`<div class="kx-wrap">${body}</div>`;
 }
 /* 時事：和基礎班同一份資料（食安事件每週二、推薦閱讀一三五），哪一區比較新就放上面 */
+const MC_HZ={micro:"#B8443A",foreign:"#B86A14",allergen:"#9A7410",chem:"#5E46B0",label:"#2F68AE"};
+function mcNewsHTML(){
+  const {fs,rd}=window.__advNews||{fs:[],rd:[]}, nwD=a=>a.reduce((m,x)=>String(x.date||"")>m?String(x.date):m,"");
+  const icon=k=>`<svg viewBox="0 0 24 24" aria-hidden="true">${(typeof NS_HIC!=="undefined"&&NS_HIC[k])||""}</svg>`;
+  const book=`<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5h6a3 3 0 0 1 3 3v11a2 2 0 0 0-2-2H4z"/><path d="M20 5h-6a3 3 0 0 0-3 3v11a2 2 0 0 1 2-2h7z"/></svg>`;
+  const card=(t,i,hz,ic,tags,meta,title,body,lab)=>`<button type="button" class="mc-card mc-news" data-act="mcnews" data-t="${t}" data-i="${i}"><span class="mc-img nh3 ${t==="r"?"rd":""}" style="--hz:${hz}"><span class="mc-top"><span class="mc-tags">${tags}</span><span class="mc-meta">${meta}</span></span><b class="mc-title3">${title}</b><span class="mc-ic3">${ic}</span></span><span class="mc-txt">${body?`<span class="mc-clamp3">${body}</span>`:""}<span class="mc-more">${lab} ›</span></span></button>`;
+  const fc=fs.map((e,i)=>{ const h=nsHaz(e)||["食安","other"]; return card("f",i,MC_HZ[h[1]]||"#4A4F57",icon(h[1]),`<i>${esc(h[0])}</i><i>${esc(nsProd(e))}</i>${e.country&&!String(e.title||"").includes(e.country)?`<i>${esc(e.country)}</i>`:""}`,`${nsMD(e.date)}・${esc(e.source||"")}`,esc(nsTitle(e)),e.happened?esc(e.happened):"","看原因與做法"); }).join("");
+  const rc=rd.map((e,i)=>card("r",i,"#4A4F57",book,`<i>推薦閱讀</i>`,`${nsMD(e.date)}・${esc(e.source||"")}`,esc(e.title||""),e.sum?esc(e.sum):"","看重點與討論")).join("");
+  const F=fc?`<section class="mc-sec"><div class="mc-h"><h3>食安提醒</h3><span>每週二更新</span></div>${fc}</section>`:"";
+  const R=rc?`<section class="mc-sec"><div class="mc-h"><h3>推薦閱讀</h3><span>每週一、三、五更新</span></div>${rc}</section>`:"";
+  if(!F&&!R) return `<p class="small">讀不到資料，稍後再試。</p>`;
+  return nwD(rd)>nwD(fs)?R+F:F+R;
+}
+function mcNewsSheet(t,i){ const {fs,rd}=window.__advNews||{fs:[],rd:[]}, e=(t==="f"?fs:rd)[i]; if(!e) return "";
+  if(t==="f") return `<div class="mc-nhd"><span class="hm-s">${esc(e.date||"")}・${esc(e.source||"")}</span><h3>${esc(nsTitle(e))}</h3>${nsTags(e)}</div><div class="mc-dl">${nsDL(e,[["happened","發生什麼"],["cause","根本原因"],["req","對應要求"],["guard","在我們廠怎麼擋"]])}</div>${e.q?`<div class="mc-q"><b>討論</b>${esc(e.q)}</div>`:""}${e.url?`<a class="mc-cta lnk" href="${esc(e.url)}" target="_blank" rel="noopener">看原文 ›</a>`:""}`;
+  return `<div class="mc-nhd"><span class="hm-s">${esc(e.date||"")}・${esc(e.source||"")}</span><h3>${esc(e.title||"")}</h3></div>${e.sum?`<p class="mc-p">${esc(e.sum)}</p>`:""}${e.q?`<div class="mc-q"><b>討論</b>${esc(e.q)}</div>`:""}${e.url?`<a class="mc-cta lnk" href="${esc(e.url)}" target="_blank" rel="noopener">看全文 ›</a>`:""}`; }
 function loadNews(){ const box=document.getElementById("newsbox"); if(!box) return;
   const get=u=>fetch(u,{cache:"no-store"}).then(r=>r.ok?r.json():[]).then(j=>Array.isArray(j)?j:(j.items||[])).catch(()=>null);
   Promise.all([get(DATA.newsUrl),get(DATA.readingsUrl)]).then(([fs,rd])=>{
     if(fs===null&&rd===null){ box.innerHTML=`<section class="card"><p class="small">讀不到時事資料。正式網站上會顯示和基礎班相同的食安事件與推薦閱讀。</p></section>`; return; }
-    box.innerHTML = nsNewsHTML(fs||[], rd||[]);
+    window.__advNews={fs:nsSort(fs||[]).slice(0,3), rd:nsSort(rd||[]).slice(0,2)}; box.innerHTML = mcNewsHTML();
   }); }
 
 /* ================= 主程式 ================= */
@@ -1163,7 +1585,7 @@ function checkAll(){
 }
 function copyText(txt,ok){ const m=document.getElementById("copymsg"); const good=()=>{ if(m) m.textContent="已複製"; if(ok) ok(); }, bad=()=>{ if(m) m.textContent="無法自動複製，請長按文字複製"; }; try{ navigator.clipboard.writeText(txt).then(good,bad); }catch(e){ bad(); } }
 function goL(W,L){ if(!st.rolesSeen.includes(st.role)){ st.rolesSeen.push(st.role); store.set("rolesSeen",st.rolesSeen); }
-  st.W=W; st.L=L; st.S=0; st.cel=false; st.resumed=false; st.tab="today"; saveLast(); render(); window.scrollTo(0,0); checkAll(); }
+  st.W=W; st.L=L; st.S=0; st.cel=false; st.resumed=false; st.tab="today"; st.home=false; saveLast(); render(); window.scrollTo(0,0); checkAll(); }
 function openSheet(t){ if(!st.terms.includes(t)){ st.terms.push(t); store.set("terms",st.terms); if(st.terms.length>=20) unlock("terms"); }
   const el=document.getElementById("sheet"); el.innerHTML=`<div class="in2"><b>${esc(t)}</b><p>${esc(DATA.gloss[t]||"")}</p><button type="button" class="btn ghost" data-act="sheetclose">關閉</button></div>`; el.hidden=false; }
 
@@ -1173,11 +1595,11 @@ document.addEventListener("click",e=>{
   if(t.dataset.thm){ st.thm=curTheme()==="dark"?"light":"dark"; store.set("thm",st.thm); applyTheme(); return; }
   if(t.dataset.flow){ st.flow=t.dataset.flow; render(); return; }
   if(t.dataset.fs){ st.fs=Math.max(0,Math.min(FS.length-1,st.fs+(+t.dataset.fs))); store.set("fs",st.fs); applyFS(); fitDeck(); return; }
-  if(t.dataset.tab){ st.tab=t.dataset.tab; render(); window.scrollTo(0,0); return; }
+  if(t.dataset.tab){ st.tab=t.dataset.tab; if(st.tab==="today"){ st.home=true; st.cel=false; } render(); window.scrollTo(0,0); return; }
   if(t.dataset.pickrole){ st.role=t.dataset.pickrole; store.set("role",st.role); if(!st.start){ st.start=todayStr; store.set("start",st.start); } touchDay(); goL(1,0); return; }
   if(t.dataset.role){ st.role=t.dataset.role; store.set("role",st.role); st.cel=false; st.resumed=false;
     if(st.tab!=="today"){ render(); return; }  /* 在「我的進度」或「共同知識」切職務時，留在原分頁 */
-    st.ptab=null; const n=nextAfter()||{W:1,L:0}; goL(n.W,n.L); return; }
+    st.ptab=null; const n=nextAfter()||{W:1,L:0}; goL(n.W,n.L); st.home=true; render(); return; }
   if(t.dataset.go){ const [W,L]=t.dataset.go.split("-").map(Number); goL(W,L); return; }
   if(t.dataset.ans){ if(st.first[t.dataset.ans]===undefined){ st.first[t.dataset.ans]=+t.dataset.i; store.set("first",st.first); touchDay(); } render(); return; }
   if(t.dataset.retry){ const k=t.dataset.retry; st.retry[k]=+t.dataset.i; store.set("retry",st.retry); const b=findBlock(k); if(b&&st.retry[k]===b.a) unlock("retry"); render(); return; }
@@ -1191,6 +1613,15 @@ document.addEventListener("click",e=>{
   if(act==="achgo"){ achQueue=[]; showAch(); st.tab="prog"; st.ptab="medal"; render(); window.scrollTo(0,0); return; }
   if(act==="sheetclose"){ document.getElementById("sheet").hidden=true; return; }
   const cs=st.cs[st.W];
+  if(act==="mcweek"){ mcOpen(mcWeekSheet(+t.dataset.w)); return; }
+  if(act==="mcmore"){ mcOpen(window.__mcMore||""); return; }
+  if(act==="mcnews"){ mcOpen(mcNewsSheet(t.dataset.t,+t.dataset.i)); return; }
+  if(act==="copynote1"){ copyText(st.notes[t.dataset.k]||""); const o=t.textContent; t.textContent="已複製 ✓"; setTimeout(()=>{ t.textContent=o; },1400); return; }
+  if(act==="home"){ st.home=true; st.cel=false; render(); window.scrollTo(0,0); return; }
+  if(act==="homego"){ const c=hmCur(); if(!c) return; const keepS=c.S||0, res=c.res; goL(c.W,c.L); if(res){ st.S=keepS; st.resumed=true; render(); } return; }
+  if(act==="hmprog"){ st.tab="prog"; render(); window.scrollTo(0,0); return; }
+  if(act==="gomtip"){ st.tab="prog"; st.ptab="medal"; st.mtipW=+t.dataset.w; render(); window.scrollTo(0,0); return; }
+  if(act==="gonews"){ if(typeof nsMarkSeen==="function") nsMarkSeen(); st.tab="know"; st.ktab="news"; render(); window.scrollTo(0,0); return; }
   if(act==="onbnext"){ st.onb++; render(); window.scrollTo(0,0); }
   else if(act==="onbback"){ st.onb=Math.max(0,st.onb-1); render(); }
   else if(act==="next"){ st.slideDir=st.slideDir||"l"; st.S++; st.resumed=false; saveLast(); render(); window.scrollTo(0,0); }
@@ -1204,7 +1635,7 @@ document.addEventListener("click",e=>{
   else if(act==="ptab"){ st.ptab=t.dataset.v; render(); }
   else if(act==="mtip"){ const w=+t.dataset.w; st.mtipW=st.mtipW===w?null:w; render(); }
   else if(act==="miss"){ const m=weekMissing(+t.dataset.w)[+t.dataset.j||0]; st.mtipW=null; if(m){ goL(+t.dataset.w,m.L); st.S=m.S; render(); } }
-  else if(act==="ktab"){ st.ktab=t.dataset.v; render(); }
+  else if(act==="ktab"){ st.ktab=t.dataset.v; if(st.ktab==="news"&&typeof nsMarkSeen==="function") nsMarkSeen(); render(); }
   else if(act==="hideresume"){ st.resumed=false; render(); }
   else if(act==="copynote"){ copyText(st.notes[lid(st.W,st.L)]||""); }
   else if(act==="copyall"){ copyText(Object.keys(st.notes).filter(k=>{ const q=parseKey(k); return q&&(!q.role||q.role===st.role)&&(st.notes[k]||"").trim(); }).map(k=>{ const q=parseKey(k); return `【第 ${q.W} 週 ${STEPN[q.L]}｜${lesson(q.W,q.L,q.role||st.role).title}】\n${st.notes[k]}`; }).join("\n\n")); }
@@ -1864,7 +2295,7 @@ function saveAud(s){ const a=getR("isleAud",{}); a[s.m]=s; setR("isleAud",a); }
 /* ---------- 場景 ---------- */
 function siteSVG(W,opt={}){ useRole();
   PR={cx:180,cy:124,a:122,b:61};
-  const stg=opt.stage??stageOf(W), end=endOf(W), key=opt.dark?"E4":skyKey(stg), lv=stg===5?(ENDLV[end]||1):0, spec=specOf(W);
+  const stg=opt.stage??stageOf(W), end=endOf(W), key=opt.dark?"E4":(opt.sky&&stg<5?opt.sky:skyKey(stg)), lv=stg===5?(ENDLV[end]||1):0, spec=specOf(W);
   let s=ADEFS+`<rect x="-50" y="-50" width="460" height="420" fill="url(#sky-${key})"/>`+skyDecor(key);
   s+=diorama(W,stg,lv,{plaque:stg===5&&plaq(W),spec,stars:stg===5?lv:0});
   if(stg===0){ const p=P(.5,.5,.05); s+=fence(false)+fence(true)+`<text x="${f1(p[0])}" y="${f1(p[1])}" text-anchor="middle" font-size="12" style="fill:var(--is-soil-ink)" font-family="var(--f-body)">本週的空地</text>`; }
@@ -1998,6 +2429,10 @@ window.isleThumbHTML=function(){ if(!st.role) return ""; const W=curWeek(), ev=e
   const go=ev&&!ev.done?"ev":au&&!au.done?"aud":ins&&!ins.done?"insp":"open";
   const tag={ev:"停電",aud:"稽核",insp:"稽查員",open:"看工地"}[go];
   return `<button type="button" class="is-thumb ${go!=="open"?"alert":""}" data-isle="${go}" aria-label="${go==="open"?"打開本週工地":tag+"，點了直接作答"}">${siteSVG(W,{vb:`${f1(c[0]-118)} ${f1(c[1]-82)} 236 150`})}<span>${go!=="open"?'<i class="is-dot"></i>':""}${tag}</span></button>`; };
+window.isleHeroHTML=function(W){ if(!st.role) return ""; PR={cx:180,cy:124,a:122,b:61}; const c=P(.5,.5,.28);
+  return siteSVG(W,{vb:`${f1(c[0]-150)} ${f1(c[1]-108)} 340 194`,sky:"E3"}); };  /* 首頁用白天藍天，施工中的夕陽橘只留在工地面板 */  /* 工地放左側約四成，右側留給人物 */
+window.islePending=function(){ if(!st.role) return []; const ev=evState(), ins=inspState(), au=audState(), out=[];
+  if(ev&&!ev.done) out.push({k:"ev"}); if(au&&!au.done) out.push({k:"aud"}); if(ins&&!ins.done) out.push({k:"insp"}); return out; };
 window.isleCelHTML=function(W){ if(!st.role) return ""; const stg=stageOf(W); markSeen();
   PR={cx:180,cy:124,a:122,b:61}; const c=P(.5,.5,.3);
   const mb=stg===5?mileDue(W):0;
@@ -2005,6 +2440,7 @@ window.isleCelHTML=function(W){ if(!st.role) return ""; const stg=stageOf(W); ma
   if(stg===5&&partyFor(W)){ if(mb) partyAfterMile=true; else setTimeout(celebrateAll,700); }
   if(mb) setTimeout(()=>mileOpen(mb),1800);
   return `<div class="is-cel">${siteSVG(W,{an:stg,vb:`${f1(c[0]-150)} ${f1(c[1]-112)} 300 196`})}<span class="is-celtag">${esc(specOf(W).n)} · ${STG[Math.max(0,stg-1)][1]}${stg===5?`完工 ${star(4-ER.indexOf(endOf(W)))}`:""}</span>${stg===5?sayHTML(W,endOf(W)):""}</div>`; };
+window.isleAreaHTML=function(){ if(!st.role) return null; let built=0,gold=0; for(let w=1;w<=WEEKS;w++){ if(stageOf(w)===5){ built++; if(endOf(w)==="E1") gold++; } } return {svg:areaSVG(),built,gold,trees:trees(),certs:certs()}; };
 window.isleAreaCard=function(n,total){ if(!st.role) return ""; let built=0,gold=0; for(let w=1;w<=WEEKS;w++){ if(stageOf(w)===5){ built++; if(endOf(w)==="E1") gold++; } }
   return `<button type="button" class="is-areacard" data-isle="openarea" aria-label="看整座園區">${areaSVG()}<span><b>${RN[role()]} · ${n} / ${total} 關</b><span>已完工 ${built} / 16 棟 · 全對 ${gold} · 證書 ${certs()} / 3 · 實踐牌 ${Object.keys(getR("islePlaq",{})).length} · 樹 ${trees()} 棵</span></span></button>`; };
 /* 重玩案例拿到更好的結局：打開工地播翻修動畫；第一次全對再加煙火 */
@@ -2013,7 +2449,7 @@ window.isleCaseEnd=function(W,prev,now){ if(!prev||stageOf(W)<5) return; if(ER.i
 function isleSig(){ if(!st.role) return ""; const W=curWeek(), ev=evState(), ins=inspState(), au=audState();
   return [role(),W,stageOf(W),endOf(W)||"",ev&&!ev.done?ev.w+"-"+ev.r:"",ins&&!ins.done?ins.key:"",au&&!au.done?au.m:""].join("|"); }
 function markSeen(){ try{ const a=byRole("isleSig"); a[role()]=isleSig(); store.set("isleSig",a); }catch(e){} }
-window.isleBoot=function(){ if(!st.role) return; ensureHost(); const ap=document.getElementById("achpop"); if(ap&&!ap.hidden&&ap.offsetParent!==null){ setTimeout(isleBoot,800); return; } const a=byRole("isleSig"); if(a[role()]!==isleSig()) openIsle("site"); };
+window.isleBoot=function(){ if(!st.role) return; ensureHost(); const ap=document.getElementById("achpop"); if(ap&&!ap.hidden&&ap.offsetParent!==null){ setTimeout(isleBoot,800); return; } markSeen(); }; /* 2026-11：首頁已顯示工地，不再自動跳出；點首頁工地圖才打開 */
 window.isleBackup=function(){ const o={}; ["isleTrees","islePlaq","isleAud","isleParty","isleMile"].forEach(k=>o[k]=store.get(k,null)); return o; };
 window.isleRestore=function(o){ if(!o) return; ["isleTrees","islePlaq","isleAud","isleParty","isleMile"].forEach(k=>{ if(o[k]&&!store.get(k,null)) store.set(k,o[k]); }); };
 
@@ -2050,7 +2486,7 @@ document.addEventListener("keydown",e=>{ if(e.key==="Escape"){ const ml=document
 window.__advIsleTest={mileOpen,mileRowSVG,siteSVG,areaSVG,evState,inspState,audState,openIsle,curWeek};
 
 })();
-render();nsBoot({fsUrl:DATA.newsUrl,rdUrl:DATA.readingsUrl,prefix:"xfadv-",eligible:()=>!!st.role,onData:()=>{},after:()=>isleBoot(),openNews:()=>{ st.tab="know"; st.ktab="news"; render(); window.scrollTo(0,0); }});
+render();nsBoot({fsUrl:DATA.newsUrl,rdUrl:DATA.readingsUrl,prefix:"xfadv-",eligible:()=>!!st.role,onData:()=>{},after:()=>isleBoot(),banner:true,onFresh:()=>{ if(st.tab==="today"&&st.home) render(); },openNews:()=>{ st.tab="know"; st.ktab="news"; render(); window.scrollTo(0,0); }});
 
 </script>
 
