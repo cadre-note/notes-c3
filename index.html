@@ -1274,7 +1274,7 @@ function gl(text,S){ const src=String(text), picks=[];
 const MET={bronze:{a:"#F1C9A0",b:"#A0602F",edge:"#7A4520",ink:"#6B3A17",hi:"#FBE3CB",n:"銅"},silver:{a:"#F6F8FA",b:"#9AA6B2",edge:"#6E7B88",ink:"#4A5560",hi:"#FFFFFF",n:"銀"},gold:{a:"#FFF0B3",b:"#C8961A",edge:"#94690A",ink:"#6A4A00",hi:"#FFF9DC",n:"金"}};
 const RIB={qa:"#1E8A5A",prod:"#3B5BDB",line:"#D2602A"};
 const MOTIF=DATA.motifPaths;
-let uid=0;
+let uid=0; /* 獎章 id 只增不歸零，避免和頁面上其他獎章撞 id（顏色錯） */
 function medal(tier,motif,label,{anim=false,role=st.role}={}){
   const id="m"+(++uid), mo=MOTIF[motif]||MOTIF.trophy;
   if(!tier) return `<svg viewBox="0 0 120 132" role="img" aria-label="${label}，未取得"><circle cx="60" cy="56" r="44" fill="none" stroke="var(--lock)" stroke-width="3" stroke-dasharray="7 6"/><g transform="translate(60,52) scale(2) translate(-12,-12)" fill="none" stroke="var(--lock)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">${mo}</g><text x="60" y="88" text-anchor="middle" font-size="11" fill="var(--muted)" font-family="var(--f-body)">${label}</text></svg>`;
@@ -1416,7 +1416,7 @@ function homeView(){
   const pend=(typeof window.islePending==="function")?window.islePending():[];
   const pc=pend.map(p=>`<button type="button" class="hm-task ${p.k==="ev"?"ev":"in"}" data-isle="${p.k}"><span class="hm-tp"><img src="${p.k==="ev"?HM_IMG.ev:HM_IMG.insp}" alt=""><em>${p.k==="ev"?"兩回合":p.k==="aud"?"外部":"本週內"}</em></span><b>${p.k==="ev"?"停電待搶修":p.k==="aud"?"外部稽核來訪":"稽查員來訪"}</b><span>${p.k==="ev"?"答對 2 題恢復供電":p.k==="aud"?"兩回合・通過拿證書":"本週 1 次・答對種樹"}</span></button>`).join("");
   const tasks=pc?`<section class="hm-sec"><h3>待處理</h3><div class="hm-tasks">${pc}</div></section>`:"";
-  const g=hmGoal(); uid=0;
+  const g=hmGoal();
   const goal=g?`<button type="button" class="hm-goal" data-act="gomtip" data-w="${g.W}"><span class="hm-gm">${medal("bronze",DATA.motifs[st.role][g.W-1],"W"+g.W)}</span><span class="hm-gt"><span class="hm-s">下一個獎章・第 ${g.W} 週</span><b>銅 → 銀：${g.t}</b></span><span class="hm-go">去補題 ›</span></button>`:"";
   return `<div class="hm adv">${id}${news}${hero}${cs}${tasks}${goal}</div>`;
 }
@@ -1564,7 +1564,7 @@ function applyTheme(){ if(st.thm==null) st.thm=store.get("thm",null); const r=do
 function fitDeck(){ const d=document.getElementById("deck"); if(!d) return; const nav=document.querySelector(".tabs"); const top=d.getBoundingClientRect().top+window.scrollY;
   d.style.height=Math.max(380, window.innerHeight-top-(nav&&!nav.hidden?nav.offsetHeight:0)-14)+"px"; }
 window.addEventListener("resize",fitDeck);
-function render(){ applyFS(); applyTheme(); uid=0; renderRoles(); const v=!st.role?todayView():st.tab==="today"?todayView():st.tab==="prog"?progView():st.tab==="flow"?flowView():knowView();
+function render(){ applyFS(); applyTheme(); renderRoles(); const v=!st.role?todayView():st.tab==="today"?todayView():st.tab==="prog"?progView():st.tab==="flow"?flowView():knowView();
   document.getElementById("view").innerHTML=`<div style="display:grid;gap:14px">${v}</div>`;
   document.querySelector(".tabs").hidden=!st.role;
   document.querySelectorAll(".tabs button").forEach(b=>b.setAttribute("aria-pressed",b.dataset.tab===st.tab?"true":"false"));
